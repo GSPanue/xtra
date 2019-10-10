@@ -16,7 +16,8 @@ const config = {
   mode: 'development',
   devServer: {
     contentBase: path.join(root, 'dist'),
-    compress: true
+    compress: true,
+    historyApiFallback: true
   },
   ...baseConfig
 };
