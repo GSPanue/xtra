@@ -1,5 +1,4 @@
 import VueLoaderPlugin from 'vue-loader/lib/plugin';
-import VuetifyLoaderPlugin from 'vuetify-loader/lib/plugin';
 import path from 'path';
 
 const root = path.resolve(__dirname, '..');
@@ -27,13 +26,12 @@ const config = {
         loader: 'babel-loader'
       },
       {
-        test: /\.(css|s(c|a)ss)$/,
-        use: [
-          'vue-style-loader',
-          'css-loader', {
-            loader: 'sass-loader'
-          }
-        ]
+        test: /\.css$/,
+        loader: 'style-loader!css-loader'
+      },
+      {
+        test: /\.(eot|svg|ttf|woff|woff2)(\?\S*)?$/,
+        loader: 'file-loader'
       }
     ]
   },
@@ -45,8 +43,7 @@ const config = {
     }
   },
   plugins: [
-    new VueLoaderPlugin(),
-    new VuetifyLoaderPlugin()
+    new VueLoaderPlugin()
   ]
 };
 

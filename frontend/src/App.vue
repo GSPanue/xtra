@@ -10,6 +10,7 @@ export default {
 
 <style>
 html, body {
-  font-family: Roboto, sans-serif;
+  height: 100%;
+  width: 100%;
 }
 </style>
