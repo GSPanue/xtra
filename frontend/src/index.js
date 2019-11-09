@@ -2,7 +2,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import App from '@/App';
 import routes from '@/router/routes';
-import { Row, Col, Card, Form, FormItem, Input, Button, Radio } from 'element-ui';
+import { Row, Col, Card, Form, FormItem, Input, Button, Radio, Dialog } from 'element-ui';
 
 Vue.use(VueRouter);
 Vue.use(Row);
@@ -13,6 +13,7 @@ Vue.use(FormItem);
 Vue.use(Input);
 Vue.use(Button);
 Vue.use(Radio);
+Vue.use(Dialog);
 
 export default new Vue({
   el: '#app',
