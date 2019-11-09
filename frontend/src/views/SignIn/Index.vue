@@ -4,7 +4,8 @@
         <h2 v-if="!shouldShowRegister">Sign In</h2>
         <h2 v-else-if="shouldShowRegister">Register</h2>
 
-        <el-form :model="signInForm" v-if="!shouldShowRegister" :rules="signInRules" status-icon>
+        <!-- Sign In Form -->
+        <el-form ref="signInForm" :model="signInForm" v-if="!shouldShowRegister" :rules="signInRules" status-icon>
           <el-form-item label="Email Address" prop="emailAddress">
             <el-input placeholder="Email Address" v-model="signInForm.emailAddress"></el-input>
           </el-form-item>
@@ -12,30 +13,32 @@
             <el-input placeholder="Password" v-model="signInForm.password" show-password></el-input>
           </el-form-item>
           <el-form-item align="right">
-            <el-button type="primary">Sign In</el-button>
+            <el-button type="primary" @click="submitForm('signInForm')">Sign In</el-button>
           </el-form-item>
         </el-form>
-        <el-form :model="registerForm" v-else-if="shouldShowRegister" :rules="registerRules" status-icon>
+
+        <!-- Register Form -->
+        <el-form ref="registerForm" :model="registerForm" v-else-if="shouldShowRegister" :rules="registerRules" status-icon>
           <el-row type="flex">
             <el-col>
-              <el-form-item label="First Name">
+              <el-form-item label="First Name" prop="firstName">
                 <el-input placeholder="First Name" v-model="registerForm.firstName"></el-input>
               </el-form-item>
             </el-col>
             <el-col :offset=2>
-              <el-form-item label="Last Name">
+              <el-form-item label="Last Name" prop="lastName">
                 <el-input placeholder="Last Name" v-model="registerForm.lastName"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row type="flex">
             <el-col>
-              <el-form-item label="Email Address">
+              <el-form-item label="Email Address" prop="emailAddress">
                 <el-input placeholder="Email Address" v-model="registerForm.emailAddress"></el-input>
               </el-form-item>
             </el-col>
             <el-col :offset=2>
-              <el-form-item label="Password">
+              <el-form-item label="Password" prop="password">
                 <el-input placeholder="Password" v-model="registerForm.password" show-password></el-input>
               </el-form-item>
             </el-col>
@@ -50,7 +53,7 @@
           </el-row>
 
           <el-form-item class="register-button" align="right">
-            <el-button type="primary">Register</el-button>
+            <el-button type="primary" @click="submitForm('registerForm')">Register</el-button>
           </el-form-item>
         </el-form>
 
@@ -74,8 +77,31 @@ export default {
       }
     };
     const checkPassword = (rule, value, callback) => {
+      const isRegisterForm = this.shouldShowRegister;
+
       if (value === '') {
         callback(new Error('Please enter your password.'));
+      }
+      else if (isRegisterForm && value.length < 6) {
+        callback(new Error('Your password must be at least 6 characters long.'));
+      }
+      else {
+        callback();
+      }
+    };
+
+    const checkFirstName = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('Please enter your first name.'));
+      }
+      else {
+        callback();
+      }
+    };
+
+    const checkLastName = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('Please enter your last name.'));
       }
       else {
         callback();
@@ -92,7 +118,7 @@ export default {
         lastName: '',
         emailAddress: '',
         password: '',
-        accountType: '0'
+        accountType: '1'
       },
       shouldShowRegister: false,
       signInRules: {
@@ -104,7 +130,18 @@ export default {
         ]
       },
       registerRules: {
-        // Implement rules for register form
+        firstName: [
+          { validator: checkFirstName, trigger: 'blur' }
+        ],
+        lastName: [
+          { validator: checkLastName, trigger: 'blur' }
+        ],
+        emailAddress: [
+          { validator: checkEmailAddress, trigger: 'blur' }
+        ],
+        password: [
+          { validator: checkPassword, trigger: 'blur' }
+        ]
       }
     };
   },
@@ -125,8 +162,18 @@ export default {
         lastName: '',
         emailAddress: '',
         password: '',
-        accountType: '0'
+        accountType: '1'
       };
+    },
+    submitForm(formName) {
+      const form = this.$refs[formName];
+
+      form.validate((valid) => {
+        if (valid) {
+          // Submit form...
+          alert('Valid');
+        }
+      });
     }
   }
 };
