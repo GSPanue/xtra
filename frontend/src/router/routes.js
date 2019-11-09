@@ -6,7 +6,7 @@ import FourOhFour from '@/views/FourOhFour/Index';
 
 const routes = [
   Route.set('/', Home, 'home').middleware(Auth).get(),
-  Route.set('/signin', SignIn, 'signIn').get(),
+  Route.set('/signin', SignIn, 'signIn').middleware(Auth).get(),
   Route.set('*', FourOhFour, 'fourOhFour').get()
 ];
 
