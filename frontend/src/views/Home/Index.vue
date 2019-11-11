@@ -1,11 +1,20 @@
 <template>
-  <div>
-    Home
-  </div>
+  <el-row type="flex">
+    <el-col class="side-bar">
+      <side-bar />
+    </el-col>
+    <el-col>
+      b
+    </el-col>
+  </el-row>
 </template>
 
-<script>
-export default {
+<style scoped>
+.el-row {
+  height: 100%;
+}
 
-};
-</script>
+.side-bar {
+  width: initial;
+}
+</style>
