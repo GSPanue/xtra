@@ -1,0 +1,57 @@
+<template>
+  <el-col class="container">
+    <el-row type="flex" align="middle" justify="center">
+      <el-col>
+        <h3>Are you sure you want to sign out?</h3>
+      </el-col>
+    </el-row>
+    <el-row type="flex" align="middle" justify="center">
+      <el-col>
+        <el-button class="cancel-button" @click="handleCancel">Cancel</el-button>
+      </el-col>
+      <el-col>
+        <el-button class="sign-out-button" type="danger" @click="handleSignOut">Sign Out</el-button>
+      </el-col>
+    </el-row>
+  </el-col>
+</template>
+
+<script>
+import { mapMutations } from 'vuex';
+
+export default {
+  methods: {
+    ...mapMutations([
+      'setRootView'
+    ]),
+    handleCancel() {
+      this.setRootView('home');
+    },
+    handleSignOut() {
+      /**
+       * ToDo: Reset Vuex state and Sign the user out.
+       */
+      this.$router.push('/signin');
+      this.setRootView('home');
+    }
+  }
+};
+</script>
+
+<style scoped>
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.cancel-button {
+  margin-right: 5px;
+}
+
+.sign-out-button {
+  margin-left: 5px;
+}
+</style>
