@@ -1,5 +1,5 @@
 <template>
-  <el-menu default-active="home" :collapse="true" @select="handleSelect">
+  <el-menu :default-active="getRootView" :collapse="true" @select="handleSelect">
     <el-menu-item index="home">
       <i class="el-icon-house"></i>
       <span slot="title">Home</span>
@@ -18,9 +18,14 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex';
+import { mapGetters, mapMutations } from 'vuex';
 
 export default {
+  computed: {
+    ...mapGetters([
+      'getRootView'
+    ])
+  },
   methods: {
     ...mapMutations([
       'setRootView'
