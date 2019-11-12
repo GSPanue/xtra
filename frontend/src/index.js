@@ -21,6 +21,7 @@ import {
 } from 'element-ui';
 
 import SideBar from '@/components/SideBar/Index';
+import SignOut from '@/components/SignOut/Index';
 
 Vue.use(VueRouter);
 Vue.use(VueAxios, Axios);
@@ -38,6 +39,7 @@ Vue.use(MenuItemGroup);
 Vue.use(MenuItem);
 
 Vue.component('side-bar', SideBar);
+Vue.component('sign-out', SignOut);
 
 export default new Vue({
   store,
