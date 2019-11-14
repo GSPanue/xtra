@@ -10,7 +10,7 @@
         <el-button class="cancel-button" @click="handleCancel">Cancel</el-button>
       </el-col>
       <el-col>
-        <el-button class="sign-out-button" type="danger" @click="handleSignOut">Sign Out</el-button>
+        <el-button class="sign-out-button" type="primary" @click="handleSignOut">Sign Out</el-button>
       </el-col>
     </el-row>
   </el-col>
