@@ -5,9 +5,9 @@
       <span slot="title">Home</span>
     </el-menu-item>
     <div class="profile">
-      <el-menu-item index="profile">
-        <i class="el-icon-user"></i>
-        <span slot="title">Profile</span>
+      <el-menu-item index="services">
+        <i class="el-icon-setting"></i>
+        <span slot="title">Services</span>
       </el-menu-item>
     </div>
     <el-menu-item index="signout">
