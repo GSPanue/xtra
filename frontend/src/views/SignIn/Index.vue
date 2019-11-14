@@ -61,8 +61,8 @@
     </el-card>
 
     <!-- Error Message Dialog -->
-    <el-dialog title="Error" :visible.sync="dialogVisible" top="0" width="30%">
-      <span>You have entered an invalid username or password.</span>
+    <el-dialog title="Error" :visible.sync="dialogVisible" top="0" width="32.5%">
+      <span>You have entered an invalid email address or password.</span>
     </el-dialog>
   </el-row>
 </template>
