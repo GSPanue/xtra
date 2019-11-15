@@ -222,9 +222,13 @@ export default {
             }
 
             if (isValid) {
-              store.set('auth', accounts.filter(({ emailAddress }) => (
+              const accountInformation = accounts.filter(({ emailAddress }) => (
                 account.emailAddress === emailAddress
-              ))[0]);
+              ))[0];
+
+              delete accountInformation['password'];
+
+              store.set('auth', accountInformation);
 
               this.$router.push('/');
             }
