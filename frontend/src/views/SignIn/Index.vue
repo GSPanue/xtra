@@ -57,7 +57,7 @@
         </el-form>
 
         <a @click="showRegister" v-if="!shouldShowRegister && !loading">Don't have an account? Click here to register!</a>
-        <a @click="showSignIn" v-if="shouldShowRegister && !loading">Already have an account? Sign In!</a>
+        <a @click="showSignIn" v-if="shouldShowRegister && !loading">Already have an account? Sign in!</a>
     </el-card>
 
     <!-- Error Message Dialog -->
