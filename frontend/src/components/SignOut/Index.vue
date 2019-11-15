@@ -23,7 +23,8 @@ import { mapMutations } from 'vuex';
 export default {
   methods: {
     ...mapMutations([
-      'setRootView'
+      'setRootView',
+      'setAccount'
     ]),
     handleCancel() {
       this.setRootView('home');
@@ -32,7 +33,7 @@ export default {
       /**
        * ToDo: Reset Vuex state and Sign the user out.
        */
-      store.remove('auth');
+      this.setAccount(null);
       this.$router.push('/signin');
       this.setRootView('home');
     }
