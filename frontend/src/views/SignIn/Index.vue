@@ -222,6 +222,10 @@ export default {
             }
 
             if (isValid) {
+              store.set('auth', accounts.filter(({ emailAddress }) => (
+                account.emailAddress === emailAddress
+              ))[0]);
+
               this.$router.push('/');
             }
             else {
