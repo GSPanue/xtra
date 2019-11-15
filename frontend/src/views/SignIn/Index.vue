@@ -69,6 +69,7 @@
 
 <script>
 import store from 'store';
+import { mapMutations } from 'vuex';
 import { isEmail, isLength } from 'validator';
 import { getAPIURL } from '@/helpers';
 
@@ -171,6 +172,9 @@ export default {
     };
   },
   methods: {
+    ...mapMutations([
+      'setAccount'
+    ]),
     showRegister() {
       this.shouldShowRegister = true;
 
@@ -228,8 +232,7 @@ export default {
 
               delete accountInformation['password'];
 
-              store.set('auth', accountInformation);
-
+              this.setAccount(accountInformation);
               this.$router.push('/');
             }
             else {
