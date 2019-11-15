@@ -68,6 +68,7 @@
 </template>
 
 <script>
+import store from 'store';
 import { isEmail, isLength } from 'validator';
 import { getAPIURL } from '@/helpers';
 
@@ -82,15 +83,17 @@ export default {
         callback(new Error('Please enter your email address.'));
       }
       else if (isRegisterForm && isEmail(value)) {
-        this.axios.get(`${api}/accounts/find`, {
-          params: {
-            emailAddress: value
-          }
-        }).then(() => {
+        const accounts = (store.get('accounts') === undefined) ? [] : store.get('accounts');
+        const emailExists = accounts.filter(({ emailAddress }) => (
+          emailAddress.toLowerCase() === value.toLowerCase()
+        )).length > 0;
+
+        if (emailExists) {
           callback(new Error('This email address is already in use.'));
-        }).catch(() => {
+        }
+        else {
           callback();
-        });
+        }
       }
       else {
         callback();
@@ -189,36 +192,43 @@ export default {
         if (valid) {
           if (isRegisterForm) {
             const account = this.registerForm;
+            const accounts = (store.get('accounts') === undefined) ? [] : store.get('accounts');
 
-            this.axios.get(`${api}/accounts/create`, {
-              params: {
-                ...account
-              }
-            }).then(() => {
-              this.showSignIn();
-            /**
-             * ToDo: Remove catch method after implementing backend.
-             */
-            }).catch(() => {
-              this.showSignIn();
-            }).finally(() => {
-              this.loading = false;
-            });
+            accounts.push(account);
+
+            store.set('accounts', accounts);
+
+            this.loading = false;
+            this.showSignIn();
           }
           else {
             const account = this.signInForm;
+            const accounts = (store.get('accounts') === undefined) ? [] : store.get('accounts');
 
-            this.axios.get(`${api}/accounts/login`, {
-              params: {
-                ...account
+            const accountExists = accounts.filter(({ emailAddress }) => (
+              account.emailAddress === emailAddress
+            )).length > 0;
+
+            let isValid = false;
+
+            if (accountExists) {
+              const passwordMatches = accounts.filter(({ emailAddress }) => (
+                account.emailAddress === emailAddress
+              ))[0].password === account.password;
+
+              if (passwordMatches) {
+                isValid = true;
               }
-            }).then(() => {
+            }
+
+            if (isValid) {
               this.$router.push('/');
-            }).catch(() => {
+            }
+            else {
               this.loading = false;
               this.dialogVisible = true;
               this.$refs['signInForm'].resetFields();
-            });
+            }
           }
         }
         else {
