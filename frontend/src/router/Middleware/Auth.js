@@ -1,9 +1,9 @@
-import store from 'store';
+import store from '@/store';
 
 class Auth {
   handle({ name }, from, next) {
-    const auth = (store.get('auth') === undefined) ? {} : store.get('auth');
-    const isAuthenticated = Object.keys(auth).length > 0;
+    const account = store.getters.getAccount;
+    const isAuthenticated = account !== null;
 
     if (name === 'home') {
       if (isAuthenticated) {
