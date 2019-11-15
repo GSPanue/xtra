@@ -24,7 +24,7 @@ class Route {
       name,
       beforeEnter: (to, from, next) => {
         if (!this.Middleware) {
-          return  next();
+          return next();
         }
 
         return this.Middleware.handle(to, from, next);
