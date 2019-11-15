@@ -17,6 +17,7 @@
 </template>
 
 <script>
+import store from 'store';
 import { mapMutations } from 'vuex';
 
 export default {
@@ -31,6 +32,7 @@ export default {
       /**
        * ToDo: Reset Vuex state and Sign the user out.
        */
+      store.remove('auth');
       this.$router.push('/signin');
       this.setRootView('home');
     }
