@@ -24,18 +24,34 @@ export default {
   methods: {
     ...mapMutations([
       'setRootView',
-      'setAccount'
+      'setHomeShowInitialView',
+      'setAccount',
+      'setSearchQuery',
+      'setSearchResults',
+      'setSortBy',
+      'setOrder',
+      'setRatingFilter',
+      'setPriceRangeFilter',
+      'setTopicsFilter',
+      'setSearchIsFetching',
     ]),
     handleCancel() {
       this.setRootView('home');
     },
     handleSignOut() {
-      /**
-       * ToDo: Reset Vuex state and Sign the user out.
-       */
       this.setAccount(null);
       this.$router.push('/signin');
+
       this.setRootView('home');
+      this.setHomeShowInitialView(true);
+      this.setSearchQuery('');
+      this.setSearchResults([]);
+      this.setSortBy('Default');
+      this.setOrder(null);
+      this.setRatingFilter(null);
+      this.setPriceRangeFilter([null, null]);
+      this.setTopicsFilter([]);
+      this.setSearchIsFetching(false);
     }
   }
 };
