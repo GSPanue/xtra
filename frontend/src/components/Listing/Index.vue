@@ -59,7 +59,7 @@
       <h6 class="h6">
         Rating (Avg. {{averageRating}}/5, {{totalRatings}} Rating{{`${(totalRatings !== 1) ? 's' : ''}`}})
       </h6>
-      <el-rate v-model="rating" @change="handleChange" :disabled="hasVoted" />
+      <el-rate v-model="rating" @change="handleChange" :disabled="shouldDisableRating" />
     </el-row>
   </el-card>
 </template>
@@ -70,6 +70,7 @@ import { mapGetters, mapMutations } from 'vuex';
 
 export default {
   props: [
+    'aid',
     'id',
     'topic',
     'tutor',
@@ -99,13 +100,18 @@ export default {
 
       return 0;
     },
-    hasVoted() {
-      const currentEmailAddress = this.getAccount().emailAddress;
+    shouldDisableRating() {
+      let shouldDisable = false;
+      const account = this.getAccount();
       const ratings = this.ratings;
 
-      return ratings.filter(({ id }) => (
-        id === currentEmailAddress
+      const hasVoted = ratings.filter(({ id }) => (
+        id === account.emailAddress
       )).length > 0;
+
+      const hasSameAccountId = account.emailAddress === this.aid;
+
+      return (hasSameAccountId || hasVoted);
     }
   },
   data() {
