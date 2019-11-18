@@ -31,7 +31,7 @@ import {
 
 import SideBar from '@/components/SideBar/Index';
 import Home from '@/components/Home/Index';
-import Services from '@/components/Services/Index';
+import Listings from '@/components/Listings/Index';
 import SignOut from '@/components/SignOut/Index';
 import SearchBar from '@/components/SearchBar/Index';
 import HomeHeader from '@/components/HomeHeader/Index';
@@ -63,7 +63,7 @@ Vue.use(Checkbox);
 
 Vue.component('side-bar', SideBar);
 Vue.component('home', Home);
-Vue.component('services', Services);
+Vue.component('listings', Listings);
 Vue.component('sign-out', SignOut);
 Vue.component('search-bar', SearchBar);
 Vue.component('home-header', HomeHeader);

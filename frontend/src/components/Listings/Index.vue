@@ -1,6 +1,6 @@
 <template>
   <div>
-    Services
+    My Listings
   </div>
 </template>
 
