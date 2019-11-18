@@ -33,7 +33,8 @@ export default {
       'setRatingFilter',
       'setPriceRangeFilter',
       'setTopicsFilter',
-      'setSearchIsFetching',
+      'setSearchIsFetching',,
+      'setListings'
     ]),
     handleCancel() {
       this.setRootView('home');
@@ -52,6 +53,7 @@ export default {
       this.setPriceRangeFilter([null, null]);
       this.setTopicsFilter([]);
       this.setSearchIsFetching(false);
+      this.setListings([]);
     }
   }
 };
