@@ -40,6 +40,7 @@
           v-for="(listing) in pair"
         >
           <listing
+            :aid="listing.aid"
             :id="listing.id"
             :topic="listing.topic"
             :tutor="listing.tutor"
