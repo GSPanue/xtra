@@ -173,7 +173,8 @@ export default {
   },
   methods: {
     ...mapMutations([
-      'setAccount'
+      'setAccount',
+      'setListings'
     ]),
     showRegister() {
       this.shouldShowRegister = true;
@@ -233,6 +234,18 @@ export default {
               delete accountInformation['password'];
 
               this.setAccount(accountInformation);
+
+              const isServiceProvider = accountInformation.accountType === 'Service Provider';
+
+              if (isServiceProvider) {
+                const listings = (store.get('listings') === 'undefined') ? [] : store.get('listings');
+                const accountListings = listings.filter(({ aid }) => (
+                  aid === accountInformation.emailAddress
+                ));
+
+                this.setListings(accountListings);
+              }
+
               this.$router.push('/');
             }
             else {
