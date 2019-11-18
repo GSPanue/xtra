@@ -4,9 +4,9 @@
       <i class="el-icon-house"></i>
       <span slot="title">Home</span>
     </el-menu-item>
-    <el-menu-item index="services" v-if="getAccount.accountType === 'Service Provider'">
-      <i class="el-icon-setting"></i>
-      <span slot="title">Services</span>
+    <el-menu-item index="listings" v-if="getAccount.accountType === 'Service Provider'">
+      <i class="el-icon-files"></i>
+      <span slot="title">My Listings</span>
     </el-menu-item>
   </el-menu>
 </template>
