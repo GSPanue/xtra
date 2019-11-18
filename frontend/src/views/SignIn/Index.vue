@@ -238,7 +238,7 @@ export default {
               const isServiceProvider = accountInformation.accountType === 'Service Provider';
 
               if (isServiceProvider) {
-                const listings = (store.get('listings') === 'undefined') ? [] : store.get('listings');
+                const listings = (store.get('listings') === undefined) ? [] : store.get('listings');
                 const accountListings = listings.filter(({ aid }) => (
                   aid === accountInformation.emailAddress
                 ));
