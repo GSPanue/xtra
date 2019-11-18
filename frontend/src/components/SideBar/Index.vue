@@ -39,11 +39,10 @@ export default {
     ]),
     handleSelect(index) {
       const currentRootView = this.getRootView;
+      const willShowListings = (currentRootView === 'home' && index === 'listings');
+      const hasAlreadySelectedHome = (currentRootView === 'home' && index === 'home');
 
-      if (currentRootView !== index) {
-        this.setRootView(index);
-      }
-      else if (currentRootView == 'home' && index == 'home') {
+      if (willShowListings || hasAlreadySelectedHome) {
         this.setHomeShowInitialView(true);
 
         this.setSearchQuery('');
@@ -55,6 +54,8 @@ export default {
         this.setPriceRangeFilter([null, null]);
         this.setTopicsFilter([]);
       }
+
+      this.setRootView(index);
     }
   }
 };
