@@ -27,7 +27,8 @@ const store = new Vuex.Store({
         },
         topics: []
       }
-    }
+    },
+    listings: []
   },
   getters: {
     getRootView: ({ root: { view } }) => (
@@ -62,6 +63,9 @@ const store = new Vuex.Store({
     ),
     getSearchIsFetching: ({ search: { isFetching } }) => (
       isFetching
+    ),
+    getListings: ({ listings }) => (
+      listings
     )
   },
   mutations: {
@@ -97,6 +101,9 @@ const store = new Vuex.Store({
     },
     setSearchIsFetching: (store, newIsFetching) => {
       store.search.isFetching = newIsFetching;
+    },
+    setListings: (store, newListings) => {
+      store.listings = newListings;
     }
   }
 });
