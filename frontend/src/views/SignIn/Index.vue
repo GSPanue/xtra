@@ -25,7 +25,7 @@
                 <el-input placeholder="First Name" v-model="registerForm.firstName" :disabled="loading"></el-input>
               </el-form-item>
             </el-col>
-            <el-col :offset=2>
+            <el-col :offset="2">
               <el-form-item label="Last Name" prop="lastName">
                 <el-input placeholder="Last Name" v-model="registerForm.lastName" :disabled="loading"></el-input>
               </el-form-item>
@@ -37,7 +37,7 @@
                 <el-input placeholder="Email Address" v-model="registerForm.emailAddress" :disabled="loading"></el-input>
               </el-form-item>
             </el-col>
-            <el-col :offset=2>
+            <el-col :offset="2">
               <el-form-item label="Password" prop="password">
                 <el-input placeholder="Password" v-model="registerForm.password" show-password :disabled="loading"></el-input>
               </el-form-item>
