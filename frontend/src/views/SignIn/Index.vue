@@ -44,7 +44,7 @@
             </el-col>
           </el-row>
 
-          <h4>Account Type</h4>
+          <h4 class="h4">Account Type</h4>
 
           <el-row type="flex" justify="start">
             <el-radio v-model="registerForm.accountType" label="Standard" border :disabled="loading">Standard</el-radio>
@@ -268,5 +268,10 @@ export default {
 .el-dialog__wrapper {
   display: flex;
   align-items: center;
+}
+
+.h4 {
+  margin: 0;
+  margin-bottom: 8px;
 }
 </style>

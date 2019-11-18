@@ -4,15 +4,9 @@
       <i class="el-icon-house"></i>
       <span slot="title">Home</span>
     </el-menu-item>
-    <div class="profile">
-      <el-menu-item index="services">
-        <i class="el-icon-setting"></i>
-        <span slot="title">Services</span>
-      </el-menu-item>
-    </div>
-    <el-menu-item index="signout">
-      <i class="el-icon-switch-button"></i>
-      <span slot="title">Sign Out</span>
+    <el-menu-item index="services" v-if="getAccount.accountType === 'Service Provider'">
+      <i class="el-icon-setting"></i>
+      <span slot="title">Services</span>
     </el-menu-item>
   </el-menu>
 </template>
@@ -23,15 +17,44 @@ import { mapGetters, mapMutations } from 'vuex';
 export default {
   computed: {
     ...mapGetters([
-      'getRootView'
+      'getRootView',
+      'getAccount'
     ])
   },
   methods: {
+    ...mapGetters([
+      'getHomeShowInitialView'
+    ]),
     ...mapMutations([
-      'setRootView'
+      'setRootView',
+      'setHomeShowInitialView',
+      'setSearchQuery',
+      'setSearchResults',
+      'setSearchIsFetching',
+      'setSortBy',
+      'setOrder',
+      'setRatingFilter',
+      'setPriceRangeFilter',
+      'setTopicsFilter'
     ]),
     handleSelect(index) {
-      this.setRootView(index);
+      const currentRootView = this.getRootView;
+
+      if (currentRootView !== index) {
+        this.setRootView(index);
+      }
+      else if (currentRootView == 'home' && index == 'home') {
+        this.setHomeShowInitialView(true);
+
+        this.setSearchQuery('');
+        this.setSearchResults([]);
+        this.setSearchIsFetching(false);
+        this.setSortBy('Default');
+        this.setOrder(null);
+        this.setRatingFilter(null);
+        this.setPriceRangeFilter([null, null]);
+        this.setTopicsFilter([]);
+      }
     }
   }
 };
@@ -42,9 +65,5 @@ export default {
   height: 100%;
   display: flex;
   flex-direction: column;
-}
-
-.profile {
-  flex: 1;
 }
 </style>
