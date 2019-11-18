@@ -5,7 +5,7 @@
     </el-col>
     <el-col v-bind:class="{content: getRootView === 'home'}">
       <home v-if="getRootView === 'home'" />
-      <services v-else-if="getRootView === 'services'" />
+      <listings v-else-if="getRootView === 'listings'" />
       <sign-out v-else-if="getRootView === 'signout'" />
     </el-col>
   </el-row>
