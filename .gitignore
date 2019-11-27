@@ -1,4 +1,5 @@
 # Xtra
 **/node_modules
 frontend/dist/js
+frontend/dist/service-worker.js
 backend/dist
