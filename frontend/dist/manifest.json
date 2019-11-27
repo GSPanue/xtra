@@ -1,0 +1,9 @@
+{
+  "short_name": "xtra",
+  "long_name": "xtra",
+  "start_url": "/",
+  "background_color": "white",
+  "theme_color": "white",
+  "scope": "/",
+  "display": "standalone"
+}
