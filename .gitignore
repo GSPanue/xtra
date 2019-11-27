@@ -1,3 +1,4 @@
 # Xtra
 **/node_modules
 frontend/dist/js
+backend/dist
