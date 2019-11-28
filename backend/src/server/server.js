@@ -7,6 +7,11 @@ const app = express();
 const port = process.env.PORT || 8080;
 const staticPath = path.join('..', 'frontend/dist');
 
+app.use(express.urlencoded({
+  extended: true
+}));
+app.use(express.json());
+
 app.use(express.static(staticPath));
 app.use('/api/v1', api);
 
