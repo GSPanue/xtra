@@ -1,7 +1,5 @@
 import mongoose from 'mongoose';
 
-import Rating from '@/database/models/Rating';
-
 const { Schema } = mongoose;
 
 const Listing = new Schema({
@@ -11,8 +9,7 @@ const Listing = new Schema({
   location: String,
   time: String,
   duration: String,
-  price: Number,
-  ratings: [Rating]
+  price: Number
 });
 
 export default Listing;
