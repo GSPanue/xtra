@@ -15,12 +15,22 @@ const createModels = () => {
   mongoose.model('Rating', Rating);
 };
 
+const createObjectId = () => (
+  mongoose.Types.ObjectId()
+);
+
 const getDatabaseConnection = () => (
   mongoose.connection
+);
+
+const getModel = (modelName) => (
+  mongoose.model(modelName)
 );
 
 export {
   connectToDatabase,
   createModels,
-  getDatabaseConnection
+  createObjectId,
+  getDatabaseConnection,
+  getModel
 };
