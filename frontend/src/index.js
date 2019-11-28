@@ -37,6 +37,8 @@ import SearchBar from '@/components/SearchBar/Index';
 import HomeHeader from '@/components/HomeHeader/Index';
 import Listing from '@/components/Listing/Index';
 
+import { registerServiceWorker } from '@/helpers';
+
 Vue.use(VueRouter);
 Vue.use(VueAxios, Axios);
 Vue.use(Row);
@@ -68,6 +70,8 @@ Vue.component('sign-out', SignOut);
 Vue.component('search-bar', SearchBar);
 Vue.component('home-header', HomeHeader);
 Vue.component('listing', Listing);
+
+registerServiceWorker();
 
 export default new Vue({
   store,
