@@ -6,7 +6,10 @@ const Account = new Schema({
   firstName: String,
   lastName: String,
   emailAddress: String,
-  password: String,
+  password: {
+    type: String,
+    select: false
+  },
   accountType: String
 });
 
