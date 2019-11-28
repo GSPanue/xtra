@@ -1,9 +1,10 @@
 import { Router } from 'express';
 
+import { createAccount, findAccount } from '@/api/controllers';
+
 const accountRouter = Router();
 
-accountRouter.get('/', (req, res) => {
-  res.send({});
-});
+accountRouter.post('/create', createAccount);
+accountRouter.get('/find', findAccount);
 
 export default accountRouter;
