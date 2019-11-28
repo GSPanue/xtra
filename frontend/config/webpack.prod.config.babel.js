@@ -1,5 +1,5 @@
 import baseConfig from './webpack.base.config.babel';
-import { GenerateSW } from 'workbox-webpack-plugin';
+import { InjectManifest } from 'workbox-webpack-plugin';
 import path from 'path';
 
 const root = path.resolve(__dirname, '..');
@@ -7,10 +7,11 @@ const plugins = baseConfig.plugins;
 
 baseConfig.plugins = [
   ...plugins,
-  new GenerateSW({
+  new InjectManifest({
+    swSrc: path.join(root, 'src/service-worker-source.js'),
+    swDest: path.join(root, 'dist/service-worker.js'),
     globDirectory: path.join(root, 'dist'),
-    globPatterns: ['**/*.{html,js,css'],
-    swDest: path.join(root, 'dist/service-worker.js')
+    globPatterns: ['**/*.{html,js,css,woff2}']
   })
 ];
 
