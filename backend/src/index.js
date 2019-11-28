@@ -1,6 +1,7 @@
 import server from './server';
-import { connectToDatabase } from '@/helpers';
+import { connectToDatabase, createModels } from '@/helpers';
 
 connectToDatabase();
+createModels();
 
 export default server;
