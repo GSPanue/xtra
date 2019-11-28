@@ -5,7 +5,6 @@ import Rating from '@/database/models/Rating';
 const { Schema } = mongoose;
 
 const Listing = new Schema({
-  id: Schema.ObjectId,
   accountId: Schema.ObjectId,
   topic: String,
   tutor: String,
