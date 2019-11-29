@@ -5,7 +5,8 @@ import { Account, Listing, Rating } from '@/database/models';
 const connectToDatabase = () => {
   mongoose.connect('mongodb://localhost/xtra', {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useFindAndModify: false
   });
 };
 
