@@ -12,10 +12,10 @@ const createAccount = ({ body }, res) => {
   account.save((error) => {
     if (error) {
       res.sendStatus(500);
+      return;
     }
-    else {
-      res.sendStatus(200);
-    }
+
+    res.sendStatus(200);
   });
 };
 
@@ -26,28 +26,28 @@ const authAccount = (req, res) => {
     (error, user) => {
       if (error || !user) {
         res.sendStatus(400);
+        return;
       }
-      else {
-        const payload = {
-          emailAddress: user.emailAddress
-        };
 
-        req.login(payload, { session: false }, (err) => {
-          if (err) {
-            res.sendStatus(400);
-          }
-          else {
-            const token = jwt.sign(JSON.stringify(payload), 'secret');
+      const payload = {
+        emailAddress: user.emailAddress
+      };
 
-            res.cookie('jwt', token, {
-              httpOnly: true,
-              secure: true
-            });
+      req.login(payload, { session: false }, (err) => {
+        if (err) {
+          res.sendStatus(400);
+          return;
+        }
 
-            res.sendStatus(200);
-          }
+        const token = jwt.sign(JSON.stringify(payload), 'secret');
+
+        res.cookie('jwt', token, {
+          httpOnly: true,
+          secure: true
         });
-      }
+
+        res.sendStatus(200);
+      });
     }
   )(req, res);
 };
@@ -61,10 +61,10 @@ const findAccount = ({ user }, res) => {
   }).select('-__v').then((account) => {
     if (account) {
       res.status(200).send(account);
+      return;
     }
-    else {
-      res.sendStatus(400);
-    }
+
+    res.sendStatus(400);
   }).catch(() => {
     res.sendStatus(500);
   });
