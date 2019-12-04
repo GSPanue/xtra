@@ -1,8 +1,7 @@
 import mongoose from 'mongoose';
 import passport from 'passport';
-import jwt from 'jsonwebtoken';
 import { Strategy as LocalStrategy } from 'passport-local';
-import { Strategy as JWTStrategy } from 'passport-jwt';
+import { ExtractJwt, Strategy as JWTStrategy } from 'passport-jwt';
 
 const createStrategies = () => {
   passport.use(new LocalStrategy({
@@ -23,19 +22,23 @@ const createStrategies = () => {
   }));
 
   passport.use(new JWTStrategy({
-    jwtFromRequest: (req) => (req.cookies.jwt),
+    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
     secretOrKey: 'secret'
-  }, (jwtPayload, done) => {
-    jwt.verify(jwtPayload, 'secret', (error) => {
-      if (error) {
-        return done('jwt expired');
-      }
+  }, (jwtPayload, done) => (
+    done(null, jwtPayload)
+  )));
+};
 
-      return done(null, jwtPayload);
-    });
-  }));
+const usePassport = (controller) => {
+  const params = [
+    passport.authenticate('jwt', { session: false }),
+    controller
+  ];
+
+  return params;
 };
 
 export {
-  createStrategies
+  createStrategies,
+  usePassport
 };
