@@ -1,10 +1,12 @@
 import { Router } from 'express';
 
-import { createAccount, findAccount } from '@/api/controllers';
+import { usePassport } from '@/helpers';
+import { createAccount, authAccount, findAccount } from '@/api/controllers';
 
 const accountRouter = Router();
 
 accountRouter.post('/create', createAccount);
-accountRouter.get('/find', findAccount);
+accountRouter.post('/auth', authAccount);
+accountRouter.get('/find', usePassport(findAccount));
 
 export default accountRouter;
