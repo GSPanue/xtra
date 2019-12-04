@@ -10,6 +10,7 @@ const createRating = ({ body }, res) => {
   rating.save((error) => {
     if (error) {
       res.sendStatus(500);
+      return;
     }
 
     res.sendStatus(200);

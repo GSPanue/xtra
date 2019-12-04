@@ -10,6 +10,7 @@ const createListing = ({ body }, res) => {
   listing.save((error) => {
     if (error) {
       res.sendStatus(500);
+      return;
     }
 
     res.sendStatus(200);
@@ -23,6 +24,7 @@ const updateListing = ({ body }, res) => {
   Listing.findOneAndUpdate({ _id }, body, (error) => {
     if (error) {
       res.sendStatus(500);
+      return;
     }
 
     res.sendStatus(200);
@@ -59,6 +61,7 @@ const removeListing = ({ body }, res) => {
   Listing.findOneAndRemove({ _id }, (error) => {
     if (error) {
       res.sendStatus(500);
+      return;
     }
 
     res.sendStatus(200);
