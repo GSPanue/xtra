@@ -69,8 +69,14 @@ const findAccount = ({ user }, res) => {
   });
 };
 
+const logout = (req, res) => {
+  res.clearCookie('jwt');
+  res.sendStatus(200);
+};
+
 export {
   createAccount,
   authAccount,
-  findAccount
+  findAccount,
+  logout
 };
