@@ -1,4 +1,5 @@
 import express from 'express';
+import cookieParser from 'cookie-parser';
 import path from 'path';
 
 import api from '@/api';
@@ -11,6 +12,7 @@ app.use(express.urlencoded({
   extended: true
 }));
 app.use(express.json());
+app.use(cookieParser());
 
 app.use(express.static(staticPath));
 app.use('/api/v1', api);
