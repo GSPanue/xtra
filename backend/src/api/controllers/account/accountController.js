@@ -51,21 +51,33 @@ const authAccount = (req, res) => {
   )(req, res);
 };
 
-const findAccount = ({ user, query }, res) => {
+const findAccount = ({ user }, res) => {
   const Account = getModel('Account');
-  const { emailAddress: userAccountEmailAddress } = user;
-  const { emailAddress: privateAccountEmailAddress } = query;
+  const { emailAddress } = user;
 
   Account.findOne({
-    emailAddress: new RegExp(privateAccountEmailAddress || userAccountEmailAddress, 'i')
+    emailAddress: new RegExp(emailAddress, 'i')
   }).select('-__v').then((account) => {
-    if (account && privateAccountEmailAddress) {
-      res.sendStatus(200);
+    if (account) {
+      res.status(200).send(account);
       return;
     }
 
-    if (account && userAccountEmailAddress) {
-      res.status(200).send(account);
+    res.sendStatus(400);
+  }).catch(() => {
+    res.sendStatus(500);
+  });
+};
+
+const findEmail = ({ query }, res) => {
+  const Account = getModel('Account');
+  const { emailAddress } = query;
+
+  Account.findOne({
+    emailAddress: new RegExp(`^${emailAddress}$`, 'i')
+  }).then((account) => {
+    if (account) {
+      res.sendStatus(200);
       return;
     }
 
@@ -84,5 +96,6 @@ export {
   createAccount,
   authAccount,
   findAccount,
+  findEmail,
   logout
 };
