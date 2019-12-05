@@ -42,8 +42,7 @@ const authAccount = (req, res) => {
         const token = jwt.sign(JSON.stringify(payload), 'secret');
 
         res.cookie('jwt', token, {
-          httpOnly: true,
-          secure: true
+          httpOnly: true
         });
 
         res.sendStatus(200);
