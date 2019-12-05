@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
-import { ExtractJwt, Strategy as JWTStrategy } from 'passport-jwt';
+import { Strategy as JWTStrategy } from 'passport-jwt';
 
 const createStrategies = () => {
   passport.use(new LocalStrategy({
@@ -22,7 +22,7 @@ const createStrategies = () => {
   }));
 
   passport.use(new JWTStrategy({
-    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+    jwtFromRequest: ({ cookies: { jwt } }) => (jwt),
     secretOrKey: 'secret'
   }, (jwtPayload, done) => (
     done(null, jwtPayload)
