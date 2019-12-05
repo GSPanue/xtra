@@ -56,7 +56,7 @@ const findAccount = ({ user }, res) => {
   const { emailAddress } = user;
 
   Account.findOne({
-    emailAddress: new RegExp(emailAddress, 'i')
+    emailAddress: new RegExp(`^${emailAddress}$`, 'i')
   }).select('-__v').then((account) => {
     if (account) {
       res.status(200).send(account);
