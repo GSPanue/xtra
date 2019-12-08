@@ -17,7 +17,11 @@ class Auth {
 
       return next();
     }).catch(() => {
-      return next('signin');
+      if (name !== 'signIn') {
+        return next('signin');
+      }
+
+      return next();
     });
   }
 }
