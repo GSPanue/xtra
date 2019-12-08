@@ -68,7 +68,6 @@
 </template>
 
 <script>
-import store from 'store';
 import { mapMutations } from 'vuex';
 import { isEmail, isLength } from 'validator';
 import { getAPIURL } from '@/helpers';
@@ -84,17 +83,15 @@ export default {
         callback(new Error('Please enter your email address.'));
       }
       else if (isRegisterForm && isEmail(value)) {
-        const accounts = (store.get('accounts') === undefined) ? [] : store.get('accounts');
-        const emailExists = accounts.filter(({ emailAddress }) => (
-          emailAddress.toLowerCase() === value.toLowerCase()
-        )).length > 0;
-
-        if (emailExists) {
-          callback(new Error('This email address is already in use.'));
-        }
-        else {
+        this.axios.get(`${api}/account/exists`, {
+          params: {
+            emailAddress: value
+          }
+        }).then(() => {
           callback();
-        }
+        }).catch(() => {
+          callback(new Error('This email address is already in use.'));
+        });
       }
       else {
         callback();
@@ -197,62 +194,30 @@ export default {
         if (valid) {
           if (isRegisterForm) {
             const account = this.registerForm;
-            const accounts = (store.get('accounts') === undefined) ? [] : store.get('accounts');
 
-            accounts.push(account);
-
-            store.set('accounts', accounts);
-
-            this.loading = false;
-            this.showSignIn();
+            this.axios.post(`${api}/account/create`, {
+              ...account
+            }).then(() => {
+              this.loading = false;
+              this.showSignIn();
+            });
           }
           else {
             const account = this.signInForm;
-            const accounts = (store.get('accounts') === undefined) ? [] : store.get('accounts');
 
-            const accountExists = accounts.filter(({ emailAddress }) => (
-              account.emailAddress === emailAddress
-            )).length > 0;
-
-            let isValid = false;
-
-            if (accountExists) {
-              const passwordMatches = accounts.filter(({ emailAddress }) => (
-                account.emailAddress === emailAddress
-              ))[0].password === account.password;
-
-              if (passwordMatches) {
-                isValid = true;
-              }
-            }
-
-            if (isValid) {
-              const accountInformation = accounts.filter(({ emailAddress }) => (
-                account.emailAddress === emailAddress
-              ))[0];
-
-              delete accountInformation['password'];
-
-              this.setAccount(accountInformation);
-
-              const isServiceProvider = accountInformation.accountType === 'Service Provider';
-
-              if (isServiceProvider) {
-                const listings = (store.get('listings') === undefined) ? [] : store.get('listings');
-                const accountListings = listings.filter(({ aid }) => (
-                  aid === accountInformation.emailAddress
-                ));
-
-                this.setListings(accountListings);
-              }
+            this.axios.post(`${api}/account/auth`, {
+              ...account
+            }).then(() => {
+              this.loading = false;
+              this.$refs['signInForm'].resetFields();
 
               this.$router.push('/');
-            }
-            else {
+            }).catch(() => {
               this.loading = false;
-              this.dialogVisible = true;
               this.$refs['signInForm'].resetFields();
-            }
+
+              this.dialogVisible = true;
+            });
           }
         }
         else {
