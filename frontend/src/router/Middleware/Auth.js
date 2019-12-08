@@ -6,7 +6,7 @@ class Auth {
   handle({ name }, from, next) {
     const api = getAPIURL();
 
-    axios.get(`${api}/account/find`, { withCredentials: true }).then(({ data }) => {
+    axios.get(`${api}/account/find`).then(({ data }) => {
       const account = data;
 
       store._mutations.setAccount[0](account);
