@@ -77,11 +77,11 @@ const findEmail = ({ query }, res) => {
     emailAddress: new RegExp(`^${emailAddress}$`, 'i')
   }).then((account) => {
     if (account) {
-      res.sendStatus(200);
+      res.sendStatus(400);
       return;
     }
 
-    res.sendStatus(400);
+    res.sendStatus(200);
   }).catch(() => {
     res.sendStatus(500);
   });
