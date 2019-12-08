@@ -208,10 +208,10 @@ export default {
             this.axios.post(`${api}/account/auth`, {
               ...account
             }).then(() => {
-              this.loading = false;
-              this.$refs['signInForm'].resetFields();
-
-              this.$router.push('/');
+              this.$router.push('/', () => {
+                this.loading = false;
+                this.$refs['signInForm'].resetFields();
+              });
             }).catch(() => {
               this.loading = false;
               this.$refs['signInForm'].resetFields();
