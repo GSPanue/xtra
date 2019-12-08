@@ -1,24 +1,24 @@
+import axios from 'axios';
 import store from '@/store';
+import { getAPIURL } from '@/helpers';
 
 class Auth {
   handle({ name }, from, next) {
-    const account = store.getters.getAccount;
-    const isAuthenticated = account !== null;
+    const api = getAPIURL();
 
-    if (name === 'home') {
-      if (isAuthenticated) {
-        return next();
-      }
+    axios.get(`${api}/account/find`, { withCredentials: true }).then(({ data }) => {
+      const account = data;
 
-      return next('signin');
-    }
-    else if (name === 'signIn') {
-      if (isAuthenticated) {
+      store._mutations.setAccount[0](account);
+
+      if (name !== 'home') {
         return next('/');
       }
 
       return next();
-    }
+    }).catch(() => {
+      return next('signin');
+    });
   }
 }
 
