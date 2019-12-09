@@ -120,7 +120,6 @@
 </template>
 
 <script>
-import store from 'store';
 import orderBy from 'lodash.orderby';
 import { mapGetters, mapMutations } from 'vuex';
 import { getAPIURL } from '@/helpers';
