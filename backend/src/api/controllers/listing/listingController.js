@@ -34,8 +34,14 @@ const updateListing = ({ user, body }, res) => {
   if (shouldUpdateRating) {
     const Listing = getModel('Listing');
 
-    Listing.findOne({ 'ratings.accountId': accountId }).then((listing) => {
-      if (listing || listing.accountId === accountId) {
+    Listing.findOne({ _id }).then((listing) => {
+      const hasAlreadyRated = listing.ratings.filter(({ accountId: id }) => (
+        accountId === id.toString()
+      )).length > 0;
+
+      const isListing = accountId === listing.accountId.toString();
+
+      if (hasAlreadyRated || isListing) {
         res.sendStatus(401);
         return;
       }
