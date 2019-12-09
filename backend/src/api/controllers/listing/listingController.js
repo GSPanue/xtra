@@ -71,18 +71,32 @@ const findListing = ({ query }, res) => {
   });
 };
 
-const removeListing = ({ body }, res) => {
+const removeListing = ({ user, body }, res) => {
   const Listing = getModel('Listing');
+  const accountId = user._id;
+  const isServiceProvider = user.accountType === 'Service Provider';
   const { _id } = body;
 
-  Listing.findOneAndRemove({ _id }, (error) => {
-    if (error) {
-      res.sendStatus(500);
-      return;
-    }
+  if (isServiceProvider) {
+    const hasMatchingId = body.accountId === accountId;
 
-    res.sendStatus(200);
-  });
+    if (hasMatchingId) {
+      Listing.findOneAndRemove({ _id }, (error) => {
+        if (error) {
+          res.sendStatus(500);
+          return;
+        }
+
+        res.sendStatus(200);
+      });
+    }
+    else {
+      res.sendStatus(401);
+    }
+  }
+  else {
+    res.sendStatus(401);
+  }
 };
 
 export {
