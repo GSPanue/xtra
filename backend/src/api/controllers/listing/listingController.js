@@ -29,7 +29,35 @@ const updateListing = ({ user, body }, res) => {
   const accountId = user._id;
   const isServiceProvider = user.accountType === 'Service Provider';
 
-  if (isServiceProvider) {
+  const shouldUpdateRating = body.rating !== null;
+
+  if (shouldUpdateRating) {
+    const Listing = getModel('Listing');
+
+    Listing.findOne({ 'ratings.accountId': accountId }).then((listing) => {
+      if (listing || listing.accountId === accountId) {
+        res.sendStatus(401);
+        return;
+      }
+
+      Listing.findOneAndUpdate({ _id }, {
+        $push: {
+          ratings: {
+            accountId,
+            rating: body.rating
+          }
+        }
+      }, (error) => {
+        if (error) {
+          res.sendStatus(500);
+          return;
+        }
+
+        res.sendStatus(200);
+      });
+    });
+  }
+  else if (isServiceProvider) {
     const Listing = getModel('Listing');
     const hasMatchingId = body.accountId === accountId;
 
@@ -49,6 +77,9 @@ const updateListing = ({ user, body }, res) => {
     else {
       res.sendStatus(401);
     }
+  }
+  else {
+    res.sendStatus(401);
   }
 };
 
