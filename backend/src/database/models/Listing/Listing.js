@@ -9,7 +9,12 @@ const Listing = new Schema({
   location: String,
   time: String,
   duration: String,
-  price: Number
+  price: Number,
+  ratings: [{
+    _id: Schema.ObjectId,
+    listingId: Schema.ObjectId,
+    accountId: Schema.ObjectId
+  }]
 });
 
 export default Listing;
