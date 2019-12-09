@@ -123,6 +123,9 @@
 import store from 'store';
 import orderBy from 'lodash.orderby';
 import { mapGetters, mapMutations } from 'vuex';
+import { getAPIURL } from '@/helpers';
+
+const api = getAPIURL();
 
 export default {
   computed: {
@@ -203,34 +206,31 @@ export default {
         listings[indexOfListing] = newListing;
       }
       else {
-        const hasListings = listings.length > 0;
-        const nextListingId = (hasListings) ? orderBy(listings, ['id'], ['desc'])[0].id + 1 : 1;
+        this.axios.post(`${api}/listing/create`, {
+          accountId: account._id,
+          ...formValues
+        }).then(() => {
+          this.axios.get(`${api}/listing/find`, {
+            params: {
+              accountId: account._id
+            }
+          }).then(({ data: listings }) => {
+            this.setListings(listings);
+          }).finally(() => {
+            this.$refs['listingForm'].resetFields();
+            this.editId = null;
 
-        const listing = {
-          aid: account.emailAddress,
-          id: nextListingId,
-          ...formValues,
-          price: Number(formValues.price),
-          ratings: []
-        };
+            this.hideDialog();
+            this.loading = false;
+          });
+        }).catch(() => {
+          this.$refs['listingForm'].resetFields();
+          this.editId = null;
 
-        listings.push(listing);
+          this.hideDialog();
+          this.loading = false;
+        });
       }
-
-      store.set('listings', listings);
-
-      const accountListings = listings.filter(({ aid }) => (
-        aid === account.emailAddress
-      ));
-
-      this.setListings(accountListings);
-
-      this.$refs['listingForm'].resetFields();
-      this.editId = null;
-
-      this.hideDialog();
-
-      this.loading = false;
     },
     removeListing(id) {
       const account = this.getAccount;
