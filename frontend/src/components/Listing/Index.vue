@@ -65,13 +65,15 @@
 </template>
 
 <script>
-import store from 'store';
 import { mapGetters, mapMutations } from 'vuex';
+import { getAPIURL } from '@/helpers';
+
+const api = getAPIURL();
 
 export default {
   props: [
-    'aid',
     'id',
+    'accountId',
     'topic',
     'tutor',
     'location',
@@ -105,11 +107,11 @@ export default {
       const account = this.getAccount();
       const ratings = this.ratings;
 
-      const hasVoted = ratings.filter(({ id }) => (
-        id === account.emailAddress
+      const hasVoted = ratings.filter(({ accountId }) => (
+        accountId === account._id
       )).length > 0;
 
-      const hasSameAccountId = account.emailAddress === this.aid;
+      const hasSameAccountId = account._id === this.accountId;
 
       return (hasSameAccountId || hasVoted);
     }
@@ -128,40 +130,29 @@ export default {
       'setSearchResults'
     ]),
     handleChange(rating) {
-      const accountId = this.getAccount().emailAddress;
       const listingId = this.id;
 
-      this.updateListingInLocalStorage(accountId, listingId, rating);
-      this.updateListingLocally(accountId, listingId, rating);
-    },
-    updateListingInLocalStorage(accountId, listingId, rating) {
-      const listings = store.get('listings');
-
-      const listingIndex = listings.findIndex(({ id }) => (
-        id === listingId
-      ));
-
-      listings[listingIndex].ratings.push({
-        id: accountId,
+      const newRating = {
+        _id: listingId,
         rating
+      };
+
+      this.axios.put(`${api}/listing/update`, {
+        ...newRating
+      }).then(() => {
+        const listings = this.getSearchResults();
+
+        const listingIndex = listings.findIndex(({ _id }) => (
+          _id === listingId
+        ));
+
+        listings[listingIndex].ratings.push({
+          ...newRating
+        });
+
+        this.setSearchResults(listings);
+        this.rating = this.averageRating;
       });
-
-      store.set('listings', listings);
-    },
-    updateListingLocally(accountId, listingId, rating) {
-      const listings = this.getSearchResults();
-
-      const listingIndex = listings.findIndex(({ id }) => (
-        id === listingId
-      ));
-
-      listings[listingIndex].ratings.push({
-        id: accountId,
-        rating
-      });
-
-      this.setSearchResults(listings);
-      this.rating = this.averageRating;
     }
   },
   mounted() {
