@@ -1,34 +1,55 @@
 import { getModel } from '@/helpers';
 
-const createListing = ({ body }, res) => {
-  const Listing = getModel('Listing');
+const createListing = ({ user, body }, res) => {
+  const isServiceProvider = user.accountType === 'Service Provider';
 
-  const listing = new Listing({
-    ...body
-  });
+  if (isServiceProvider) {
+    const Listing = getModel('Listing');
 
-  listing.save((error) => {
-    if (error) {
-      res.sendStatus(500);
-      return;
-    }
+    const listing = new Listing({
+      ...body
+    });
 
-    res.sendStatus(200);
-  });
+    listing.save((error) => {
+      if (error) {
+        res.sendStatus(500);
+        return;
+      }
+
+      res.sendStatus(200);
+    });
+  }
+  else {
+    res.sendStatus(401);
+  }
 };
 
-const updateListing = ({ body }, res) => {
-  const Listing = getModel('Listing');
+const updateListing = ({ user, body }, res) => {
   const { _id } = body;
+  const accountId = user._id;
+  const isServiceProvider = user.accountType === 'Service Provider';
 
-  Listing.findOneAndUpdate({ _id }, body, (error) => {
-    if (error) {
-      res.sendStatus(500);
-      return;
+  if (isServiceProvider) {
+    const Listing = getModel('Listing');
+    const hasMatchingId = body.accountId === accountId;
+
+    if (hasMatchingId) {
+      const update = body;
+      delete update.ratings;
+
+      Listing.findOneAndUpdate({ _id }, update, (error) => {
+        if (error) {
+          res.sendStatus(500);
+          return;
+        }
+
+        res.sendStatus(200);
+      });
     }
-
-    res.sendStatus(200);
-  });
+    else {
+      res.sendStatus(401);
+    }
+  }
 };
 
 const findListing = ({ query }, res) => {
@@ -43,7 +64,7 @@ const findListing = ({ query }, res) => {
 
   Listing.find({
     ...newQuery
-  }).then((listings) => {
+  }).select('-__v').then((listings) => {
     res.status(200).send(listings);
   }).catch(() => {
     res.sendStatus(500);
