@@ -26,7 +26,7 @@
       >
         <el-row
           class="listing-pair"
-          v-bind:key="listing.id"
+          v-bind:key="listing._id"
           v-for="(listing) in pair"
         >
           <el-row type="flex" justify="end" class="options-spacing">
@@ -43,7 +43,7 @@
                 class="options-button"
                 icon="el-icon-delete"
                 size="mini"
-                @click="removeListing(listing.id)"
+                @click="removeListing(listing._id)"
               />
             </el-tooltip>
           </el-row>
@@ -248,18 +248,19 @@ export default {
     },
     removeListing(id) {
       const account = this.getAccount;
-      let listings = store.get('listings');
+      const listingId = id;
 
-      listings = listings.filter(({ id: listingId }) => (
-        listingId !== id
-      ));
-
-      const accountListings = listings.filter(({ aid }) => (
-        aid === account.emailAddress
-      ));
-
-      store.set('listings', listings);
-      this.setListings(accountListings);
+      this.axios.post(`${api}/listing/remove`, {
+        _id: listingId
+      }).then(() => {
+        this.axios.get(`${api}/listing/find`, {
+          params: {
+            accountId: account._id
+          }
+        }).then(({ data: listings }) => {
+          this.setListings(listings);
+        });
+      });
     },
     handleClosed() {
       if (!this.loading) {
