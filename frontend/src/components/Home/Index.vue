@@ -36,12 +36,12 @@
       >
         <el-row
           class="listing-pair"
-          v-bind:key="listing.id"
+          v-bind:key="listing._id"
           v-for="(listing) in pair"
         >
           <listing
-            :aid="listing.aid"
-            :id="listing.id"
+            :id="listing._id"
+            :accountId="listing.accountId"
             :topic="listing.topic"
             :tutor="listing.tutor"
             :location="listing.location"
