@@ -140,18 +140,24 @@ export default {
       this.axios.put(`${api}/listing/update`, {
         ...newRating
       }).then(() => {
-        const listings = this.getSearchResults();
+        this.axios.get(`${api}/listing/find`, {
+          params: {
+            _id: listingId
+          }
+        }).then(({ data: listing }) => {
+          const listings = this.getSearchResults();
+          const listingIndex = listings.findIndex(({ _id }) => (
+            _id === listingId
+          ));
 
-        const listingIndex = listings.findIndex(({ _id }) => (
-          _id === listingId
-        ));
+          const newListings = [
+            ...listings
+          ];
 
-        listings[listingIndex].ratings.push({
-          ...newRating
+          newListings[listingIndex] = listing[0];
+
+          this.setSearchResults(newListings);
         });
-
-        this.setSearchResults(listings);
-        this.rating = this.averageRating;
       });
     }
   },
