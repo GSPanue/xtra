@@ -30,8 +30,11 @@ const authAccount = (req, res) => {
       }
 
       const payload = {
+        _id: user._id,
         emailAddress: user.emailAddress
       };
+
+      console.log(payload);
 
       req.login(payload, { session: false }, (err) => {
         if (err) {
