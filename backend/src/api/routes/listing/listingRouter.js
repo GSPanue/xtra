@@ -13,6 +13,6 @@ const listingRouter = Router();
 listingRouter.post('/create', usePassport(createListing));
 listingRouter.put('/update', usePassport(updateListing));
 listingRouter.get('/find', findListing);
-listingRouter.delete('/remove', usePassport(removeListing));
+listingRouter.post('/remove', usePassport(removeListing));
 
 export default listingRouter;
