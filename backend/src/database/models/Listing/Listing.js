@@ -11,8 +11,8 @@ const Listing = new Schema({
   duration: String,
   price: Number,
   ratings: [{
-    listingId: Schema.ObjectId,
-    accountId: Schema.ObjectId
+    accountId: Schema.ObjectId,
+    rating: Number
   }]
 });
 
