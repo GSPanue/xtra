@@ -11,7 +11,7 @@ A web application for looking for after school classes and activities
 
 ## Demo
 1. Generate the frontend and backend bundles: ``npm run build``
-2. Add the following code to ``service-worker.js``, located in ``frontend/dist``:
+2. Add the following code to ``service-worker.js`` located in ``frontend/dist``:
 
     ```
     workbox.routing.registerNavigationRoute(
