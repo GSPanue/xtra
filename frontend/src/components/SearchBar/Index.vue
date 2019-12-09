@@ -17,7 +17,6 @@
 </template>
 
 <script>
-import store from 'store';
 import { mapGetters, mapMutations } from 'vuex';
 import { getAPIURL } from '@/helpers';
 
@@ -55,30 +54,29 @@ export default {
       if (query.length > 0) {
         this.setSearchIsFetching(true);
 
-        const listings = (store.get('listings') === undefined) ? [] : store.get('listings');
-        let results = [];
+        this.axios.get(`${api}/listing/find`, {
+          params: {
+            topic: query
+          }
+        }).then(({ data: listings }) => {
+          this.setSearchQuery(query);
+          this.setSearchResults(listings);
+          this.clearInput();
 
-        results = listings.filter(({ topic }) => (
-          topic.toLowerCase().includes(query.toLowerCase())
-        ));
+          this.setSortBy('Default');
+          this.setOrder(null);
+          this.setRatingFilter(null);
+          this.setPriceRangeFilter([null, null]);
+          this.setTopicsFilter([]);
 
-        this.setSearchQuery(query);
-        this.setSearchResults(results);
-        this.clearInput();
+          this.setSearchIsFetching(false);
 
-        this.setSearchIsFetching(false);
+          const isShowingInitialView = this.getHomeShowInitialView();
 
-        this.setSortBy('Default');
-        this.setOrder(null);
-        this.setRatingFilter(null);
-        this.setPriceRangeFilter([null, null]);
-        this.setTopicsFilter([]);
-
-        const isShowingInitialView = this.getHomeShowInitialView();
-
-        if (isShowingInitialView) {
-          this.setHomeShowInitialView(false);
-        }
+          if (isShowingInitialView) {
+            this.setHomeShowInitialView(false);
+          }
+        });
       }
     },
     clearInput() {
