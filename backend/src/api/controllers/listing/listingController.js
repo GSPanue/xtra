@@ -44,13 +44,9 @@ const findListing = ({ query }, res) => {
   Listing.find({
     ...newQuery
   }).then((listings) => {
-    res.status(200).send({
-      data: listings
-    });
+    res.status(200).send(listings);
   }).catch(() => {
-    res.status(500).send({
-      data: []
-    });
+    res.sendStatus(500);
   });
 };
 
