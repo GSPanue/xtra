@@ -1,5 +1,6 @@
 import { Router } from 'express';
 
+import { usePassport } from '@/helpers';
 import {
   createListing,
   updateListing,
@@ -9,9 +10,9 @@ import {
 
 const listingRouter = Router();
 
-listingRouter.post('/create', createListing);
-listingRouter.put('/update', updateListing);
+listingRouter.post('/create', usePassport(createListing));
+listingRouter.put('/update', usePassport(updateListing));
 listingRouter.get('/find', findListing);
-listingRouter.delete('/remove', removeListing);
+listingRouter.delete('/remove', usePassport(removeListing));
 
 export default listingRouter;
