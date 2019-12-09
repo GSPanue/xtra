@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-import { Account, Listing, Rating } from '@/database/models';
+import { Account, Listing } from '@/database/models';
 
 const connectToDatabase = () => {
   mongoose.connect('mongodb://localhost/xtra', {
@@ -13,7 +13,6 @@ const connectToDatabase = () => {
 const createModels = () => {
   mongoose.model('Account', Account);
   mongoose.model('Listing', Listing);
-  mongoose.model('Rating', Rating);
 };
 
 const createObjectId = () => (
