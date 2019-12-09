@@ -34,8 +34,6 @@ const authAccount = (req, res) => {
         emailAddress: user.emailAddress
       };
 
-      console.log(payload);
-
       req.login(payload, { session: false }, (err) => {
         if (err) {
           res.sendStatus(400);
