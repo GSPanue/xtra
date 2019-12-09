@@ -29,7 +29,7 @@ const updateListing = ({ user, body }, res) => {
   const accountId = user._id;
   const isServiceProvider = user.accountType === 'Service Provider';
 
-  const shouldUpdateRating = body.rating !== null;
+  const shouldUpdateRating = body.rating !== undefined;
 
   if (shouldUpdateRating) {
     const Listing = getModel('Listing');
