@@ -48,8 +48,8 @@
             </el-tooltip>
           </el-row>
           <listing
-            :aid="listing.aid"
-            :id="listing.id"
+            :id="listing._id"
+            :accountId="listing.accountId"
             :topic="listing.topic"
             :tutor="listing.tutor"
             :location="listing.location"
