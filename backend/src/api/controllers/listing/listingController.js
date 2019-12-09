@@ -78,21 +78,27 @@ const removeListing = ({ user, body }, res) => {
   const { _id } = body;
 
   if (isServiceProvider) {
-    const hasMatchingId = body.accountId === accountId;
+    Listing.findOne({ _id }).then((listing) => {
+      const { accountId: listingAccountId } = listing;
 
-    if (hasMatchingId) {
-      Listing.findOneAndRemove({ _id }, (error) => {
-        if (error) {
-          res.sendStatus(500);
-          return;
-        }
+      const hasMatchingId = accountId === listingAccountId.toString();
 
-        res.sendStatus(200);
-      });
-    }
-    else {
-      res.sendStatus(401);
-    }
+      if (hasMatchingId) {
+        Listing.findOneAndRemove({ _id }, (error) => {
+          if (error) {
+            res.sendStatus(500);
+            return;
+          }
+
+          res.sendStatus(200);
+        });
+      }
+      else {
+        res.sendStatus(401);
+      }
+    }).catch(() => {
+      res.sendStatus(500);
+    });
   }
   else {
     res.sendStatus(401);
