@@ -183,27 +183,41 @@ export default {
 
       const account = this.getAccount;
       const formValues = this.listingForm;
-      const listings = (store.get('listings') === undefined) ? [] : store.get('listings');
 
       const hasEditedListing = this.isEditingListing;
 
       if (hasEditedListing) {
         const listingId = this.editId;
-        const originalListing = listings.filter(({ id }) => (
-          id === listingId
-        ))[0];
 
-        const newListing = {
-          ...originalListing,
-          ...formValues,
-          price: Number(formValues.price)
-        };
+        this.axios.get(`${api}/listing/find`, {
+          params: {
+            _id: listingId
+          }
+        }).then(({ data: listing }) => {
+          const editedListing = {
+            ...listing[0],
+            ...formValues,
+            price: Number(formValues.price)
+          };
 
-        const indexOfListing = listings.findIndex(({ id }) => (
-          id === listingId
-        ));
+          this.axios.put(`${api}/listing/update`, {
+            ...editedListing
+          }).then(() => {
+            this.axios.get(`${api}/listing/find`, {
+              params: {
+                accountId: account._id
+              }
+            }).then(({ data: listings }) => {
+              this.$refs['listingForm'].resetFields();
+              this.editId = null;
 
-        listings[indexOfListing] = newListing;
+              this.hideDialog();
+              this.loading = false;
+
+              this.setListings(listings);
+            });
+          });
+        });
       }
       else {
         this.axios.post(`${api}/listing/create`, {
@@ -262,17 +276,17 @@ export default {
       }
     },
     editListing(listing) {
-      const newListing = {
+      const tempListing = {
         ...listing
       };
 
-      const id = listing.id;
+      const id = listing._id;
 
-      delete newListing.id;
-      delete newListing.ratings;
+      delete tempListing._id;
+      delete tempListing.ratings;
 
       this.editId = id;
-      this.listingForm = newListing;
+      this.listingForm = tempListing;
       this.showDialog();
     }
   },
