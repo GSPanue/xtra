@@ -1,8 +1,4 @@
 {
-  "name": "xtra",
-  "description": "A web and native application for looking for after school classes and activities",
-  "author": "Gurdev S. Panue",
-  "version": "1.0.0",
   "scripts": {
     "postinstall": "run-p install:*",
     "install:frontend": "cd frontend && npm install",
