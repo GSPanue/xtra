@@ -3,3 +3,6 @@
 **/frontend/dist/js
 **/frontend/dist/service-worker.js
 **/backend/dist
+hooks
+platforms
+.idea
