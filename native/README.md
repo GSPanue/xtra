@@ -4,4 +4,4 @@
 
 ## Demo
 
-1. Preview on device: ``npm preview``
+1. Preview on Android emulator: ``tns run android``
