@@ -6,6 +6,7 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex';
 import { getAPIURL } from '@/helpers';
 
 const api = getAPIURL();
@@ -17,6 +18,10 @@ export default {
     }
   },
   methods: {
+    ...mapMutations([
+      'setAccount',
+      'setListings'
+    ]),
     handleLoaded() {
       this.axios.get(`${api}/account/find`).then(({ data }) => {
         const account = data;
@@ -28,23 +33,15 @@ export default {
               accountId: account._id
             }
           }).then(({ data: listings }) => {
-            /**
-             * ToDo:
-             *
-             * setAccount(account);
-             * setListings(lsitings);
-             *
-             */
+            this.setAccount(account);
+            this.setListings(listings);
 
             this.isAuthenticated = true;
             return;
           });
 
-          /**
-           * ToDo:
-           *
-           * setAccount(account);
-           */
+          this.setAccount(account);
+
           this.isAuthenticated = true;
         }
       })
