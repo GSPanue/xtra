@@ -5,6 +5,7 @@
       class="text-field"
       :keyboardType="keyboardType"
       :secure="secure"
+      v-model="inputVal"
     />
   </FlexboxLayout>
 </template>
@@ -14,8 +15,19 @@ export default {
   props: [
     'label',
     'keyboardType',
-    'secure'
-  ]
+    'secure',
+    'value'
+  ],
+  computed: {
+    inputVal: {
+      get() {
+        return this.value
+      },
+      set(newValue) {
+        this.$emit('input', newValue);
+      }
+    }
+  }
 }
 </script>
 
