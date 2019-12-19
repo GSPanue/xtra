@@ -43,8 +43,11 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex';
 import { isEmail } from 'validator';
-import { sendAlert } from '@/helpers';
+import { sendAlert, getAPIURL } from '@/helpers';
+
+const api = getAPIURL();
 
 export default {
   data() {
@@ -61,6 +64,10 @@ export default {
     }
   },
   methods: {
+    ...mapMutations([
+      'setAccount',
+      'setListings'
+    ]),
     showRegister() {
       this.resetForm();
       this.shouldShowSignInForm = false;
@@ -89,13 +96,39 @@ export default {
         if (hasEnteredEmailAndPassword && hasEnteredValidEmail) {
           this.isBusy = true;
 
-          // Authenticate user...
+          this.axios.post(`${api}/account/auth`, {
+            emailAddress: account.emailAddress,
+            password: account.password
+          }).then(() => {
+            return this.axios.get(`${api}/account/find`);
+          }).then(({ data: account }) => {
+            const isServiceProvider = account.accountType === 'Service Provider';
+
+            if (isServiceProvider) {
+              this.axios.get(`${api}/listing/find`, {
+                params: {
+                  accountId: account._id
+                }
+              }).then(({ data: listings }) => {
+                this.setAccount(account);
+                this.setListings(listings);
+
+                return;
+              });
+            }
+
+            this.setAccount(account);
+          }).catch(() => {
+            this.resetForm();
+            this.isBusy = false;
+
+            sendAlert('You have entered an invalid email address or password.');
+          });
 
           return;
         }
 
         sendAlert('Please provide an email address and password.');
-        return;
       }
     }
   }
