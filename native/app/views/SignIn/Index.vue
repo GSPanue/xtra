@@ -25,6 +25,40 @@
       />
     </FlexboxLayout>
 
+    <!-- Register Form -->
+    <FlexboxLayout v-else flexDirection="column">
+      <FlexboxLayout flexDirection="row" justifyContent="space-between">
+        <input
+          class="form-left"
+          label="First Name"
+          v-model="account.firstName"
+        />
+        <input
+          class="form-right"
+          label="Last Name"
+          v-model="account.lastName"
+        />
+      </FlexboxLayout>
+      <FlexboxLayout flexDirection="row" justifyContent="space-between">
+        <input
+          class="form-left"
+          label="Email Address"
+          keyboardType="email"
+          v-model="account.emailAddress"
+        />
+        <input
+          class="form-right"
+          label="Password"
+          :secure="true"
+          v-model="account.password"
+        />
+      </FlexboxLayout>
+      <SegmentedBar class="segmented-bar" v-model="account.accountType">
+        <SegmentedBarItem title="Standard" />
+        <SegmentedBarItem title="Service Provider" />
+      </SegmentedBar>
+    </FlexboxLayout>
+
     <Button class="submit" text="Submit" @tap="handleSubmit" />
 
     <Label
@@ -36,7 +70,7 @@
     <Label
       v-else
       class="text-button"
-      text="Already haven an account? Click to sign in!"
+      text="Already have an account? Click to sign in!"
       @tap="showSignIn"
     />
   </FlexboxLayout>
@@ -57,7 +91,7 @@ export default {
         password: '',
         firstName: '',
         lastName: '',
-        accountType: 'Standard'
+        accountType: 0
       },
       shouldShowSignInForm: true,
       isBusy: false
@@ -82,7 +116,7 @@ export default {
         password: '',
         firstName: '',
         lastName: '',
-        accountType: 'Standard'
+        accountType: 0
       }
     },
     handleSubmit() {
@@ -119,7 +153,6 @@ export default {
 
             this.setAccount(account);
           }).catch(() => {
-            this.resetForm();
             this.isBusy = false;
 
             sendAlert('You have entered an invalid email address or password.');
@@ -129,6 +162,40 @@ export default {
         }
 
         sendAlert('Please provide an email address and password.');
+      }
+      else {
+        const hasEnteredName = account.firstName && account.lastName;
+        const hasEnteredEmailAndPassword = account.emailAddress && account.password;
+        const hasEnteredValidEmail = isEmail(account.emailAddress);
+
+        if (!hasEnteredName && !hasEnteredEmailAndPassword) {
+          sendAlert('Please complete all of the form fields.');
+          return;
+        }
+        else if (!hasEnteredValidEmail) {
+          sendAlert('Please provide an email address.');
+          return;
+        }
+
+        this.isBusy = true;
+
+        this.axios.get(`${api}/account/exists`, {
+          params: {
+            emailAddress: account.emailAddress
+          }
+        }).then(() => {
+          this.axios.post(`${api}/account/create`, {
+            ...account,
+            accountType: (account.accountType === 0) ? 'Standard' : 'Service Provider'
+          }).then(() => {
+            this.showSignIn();
+            this.isBusy = false;
+          });
+        }).catch(() => {
+          this.isBusy = false;
+
+          sendAlert('This email address is already in use.');
+        });
       }
     }
   }
@@ -155,5 +222,20 @@ export default {
   margin-top: 40px;
   font-size: 16px;
   align-self: center;
+}
+
+.form-left {
+  width: 100%;
+  margin-right: 2.5%;
+}
+
+.form-right {
+  width: 100%;
+  margin-left: 2.5%;
+}
+
+.segmented-bar {
+  margin-top: 40px;
+  font-size: 16px;
 }
 </style>
