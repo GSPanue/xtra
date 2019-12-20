@@ -8,7 +8,7 @@ const store = new Vuex.Store({
     isBusy: false,
     account: null,
     searchQuery: '',
-    searchResults: [],
+    results: [],
     listings: []
   },
   getters: {
@@ -21,8 +21,8 @@ const store = new Vuex.Store({
     getSearchQuery: ({ searchQuery }) => (
       searchQuery
     ),
-    getSearchResults: ({ searchResults }) => (
-      searchResults
+    getResults: ({ results }) => (
+      results
     ),
     getListings: ({ listings }) => (
       listings
@@ -38,8 +38,8 @@ const store = new Vuex.Store({
     setSearchQuery: (store, newSearchQuery) => {
       store.searchQuery = newSearchQuery;
     },
-    setSearchResults: (store, newSearchResults) => {
-      store.searchResults = newSearchResults;
+    setResults: (store, newResults) => {
+      store.results = newResults;
     },
     setListings: (store, newListings) => {
       store.listings = newListings
@@ -48,7 +48,7 @@ const store = new Vuex.Store({
       store.isBusy = false;
       store.account = null;
       store.searchQuery = '';
-      store.searchResults = [];
+      store.results = [];
       store.listings = [];
     }
   }
