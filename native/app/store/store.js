@@ -22,6 +22,10 @@ const store = new Vuex.Store({
     },
     setListings: (store, newListings) => {
       store.listings = newListings
+    },
+    resetApp: (store) => {
+      store.account = null;
+      store.listings = [];
     }
   }
 });
