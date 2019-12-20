@@ -35,30 +35,30 @@ import { getAPIURL } from '@/helpers';
 const api = getAPIURL();
 
 export default {
-  data() {
-    return {
-      isBusy: false
-    }
-  },
   computed: {
     ...mapGetters([
+      'getIsBusy',
       'getAccount'
     ]),
+    isBusy() {
+      return this.getIsBusy;
+    },
     isServiceProvider() {
       return this.getAccount.accountType === 'Service Provider';
     }
   },
   methods: {
     ...mapMutations([
+      'setIsBusy',
       'resetApp'
     ]),
     handleSignOut() {
-      this.isBusy = true;
+      this.setIsBusy(true);
 
       this.axios.post(`${api}/account/logout`).then(() => {
         this.resetApp();
       }).catch(() => {
-        this.isBusy = false;
+        this.setIsBusy(false);
       });
     }
   }

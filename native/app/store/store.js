@@ -5,10 +5,14 @@ Vue.use(Vuex);
 
 const store = new Vuex.Store({
   state: {
+    isBusy: false,
     account: null,
     listings: []
   },
   getters: {
+    getIsBusy: ({ isBusy }) => (
+      isBusy
+    ),
     getAccount: ({ account }) => (
       account
     ),
@@ -17,6 +21,9 @@ const store = new Vuex.Store({
     )
   },
   mutations: {
+    setIsBusy: (store, newIsBusy) => {
+      store.isBusy = newIsBusy
+    },
     setAccount: (store, newAccount) => {
       store.account = newAccount;
     },
@@ -24,6 +31,7 @@ const store = new Vuex.Store({
       store.listings = newListings
     },
     resetApp: (store) => {
+      store.isBusy = false;
       store.account = null;
       store.listings = [];
     }

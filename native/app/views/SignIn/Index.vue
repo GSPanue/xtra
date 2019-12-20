@@ -77,7 +77,7 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex';
+import { mapMutations, mapGetters } from 'vuex';
 import { isEmail } from 'validator';
 import { sendAlert, getAPIURL } from '@/helpers';
 
@@ -93,12 +93,20 @@ export default {
         lastName: '',
         accountType: 0
       },
-      shouldShowSignInForm: true,
-      isBusy: false
+      shouldShowSignInForm: true
+    }
+  },
+  computed: {
+    ...mapGetters([
+      'getIsBusy'
+    ]),
+    isBusy() {
+      return this.getIsBusy;
     }
   },
   methods: {
     ...mapMutations([
+      'setIsBusy',
       'setAccount',
       'setListings'
     ]),
@@ -128,7 +136,7 @@ export default {
         const hasEnteredValidEmail = isEmail(account.emailAddress);
 
         if (hasEnteredEmailAndPassword && hasEnteredValidEmail) {
-          this.isBusy = true;
+          this.setIsBusy(true);
 
           this.axios.post(`${api}/account/auth`, {
             emailAddress: account.emailAddress,
@@ -144,6 +152,7 @@ export default {
                   accountId: account._id
                 }
               }).then(({ data: listings }) => {
+                this.setIsBusy(false);
                 this.setAccount(account);
                 this.setListings(listings);
 
@@ -151,9 +160,10 @@ export default {
               });
             }
 
+            this.setIsBusy(false);
             this.setAccount(account);
           }).catch(() => {
-            this.isBusy = false;
+            this.setIsBusy(false);
 
             sendAlert('You have entered an invalid email address or password.');
           });
@@ -177,7 +187,7 @@ export default {
           return;
         }
 
-        this.isBusy = true;
+        this.setIsBusy(true);
 
         this.axios.get(`${api}/account/exists`, {
           params: {
@@ -189,10 +199,10 @@ export default {
             accountType: (account.accountType === 0) ? 'Standard' : 'Service Provider'
           }).then(() => {
             this.showSignIn();
-            this.isBusy = false;
+            this.setIsBusy(false);
           });
         }).catch(() => {
-          this.isBusy = false;
+          this.setIsBusy(false);
 
           sendAlert('This email address is already in use.');
         });
