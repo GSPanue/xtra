@@ -5,13 +5,15 @@
   <FlexboxLayout v-else class="container" flexDirection="column" alignItems="stretch">
     <!-- Header -->
     <FlexboxLayout flexDirection="row" justifyContent="stretch">
-      <FlexboxLayout class="flex-1" flexDirection="column" alignItems="flex-start">
-        <Label text="Top" />
+      <FlexboxLayout v-if="isServiceProvider" class="flex-1" flexDirection="column" alignItems="flex-start">
+        <Label class="text-button" text="My Listings" />
       </FlexboxLayout>
       <FlexboxLayout class="flex-1" flexDirection="column" alignItems="flex-end">
         <Label class="text-button" text="Sign Out" @tap="handleSignOut" />
       </FlexboxLayout>
     </FlexboxLayout>
+
+    <!-- Search Bar -->
     <FlexboxLayout class="flex-1" flexDirection="row">
       <FlexboxLayout
         class="flex-1"
@@ -19,7 +21,6 @@
         justifyContent="center"
         alignItems="center"
       >
-        <!-- Search Bar -->
         <Label class="heading" text="Xtra" />
         <search-bar />
       </FlexboxLayout>
@@ -28,7 +29,7 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex';
+import { mapMutations, mapGetters } from 'vuex';
 import { getAPIURL } from '@/helpers';
 
 const api = getAPIURL();
@@ -37,6 +38,14 @@ export default {
   data() {
     return {
       isBusy: false
+    }
+  },
+  computed: {
+    ...mapGetters([
+      'getAccount'
+    ]),
+    isServiceProvider() {
+      return this.getAccount.accountType === 'Service Provider';
     }
   },
   methods: {
