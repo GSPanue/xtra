@@ -71,7 +71,7 @@ export default {
 }
 
 .heading {
-  padding-bottom: 60px;
+  padding-bottom: 20px;
   font-size: 34px;
 }
 
