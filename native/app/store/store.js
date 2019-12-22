@@ -44,6 +44,10 @@ const store = new Vuex.Store({
     setListings: (store, newListings) => {
       store.listings = newListings
     },
+    clearResults: (store) => {
+      store.searchQuery = '';
+      store.results = []
+    },
     resetApp: (store) => {
       store.isBusy = false;
       store.account = null;
