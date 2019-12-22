@@ -20,7 +20,7 @@
     <FlexboxLayout v-if="hasResults" class="query" flexDirection="column">
       <Label :text="getQueryText" />
     </FlexboxLayout>
-    <ScrollView v-if="hasResults" orientation="vertical" :scrollBarIndicatorVisible="false">
+    <ScrollView v-if="hasResults" orientation="vertical" :scrollBarIndicatorVisible="false" height="100%">
       <StackLayout orientation="vertical" verticalAlignment="stretch">
         <listing />
       </StackLayout>
