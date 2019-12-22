@@ -13,7 +13,7 @@
 
 <script>
 import { mapMutations } from 'vuex';
-import { getAPIURL } from '@/helpers';
+import { getAPIURL, sendAlert } from '@/helpers';
 
 const api = getAPIURL();
 
@@ -39,10 +39,17 @@ export default {
           topic: query
         }
       }).then(({ data: results }) => {
-        this.setSearchQuery(query);
-        this.setResults(results);
+        const hasNoResults = results.length === 0;
 
         this.setIsBusy(false);
+
+        if (hasNoResults) {
+          sendAlert('No listings were found.');
+          return;
+        }
+
+        this.setSearchQuery(query);
+        this.setResults(results);
       }).catch(() => {
         this.setIsBusy(false);
       });
