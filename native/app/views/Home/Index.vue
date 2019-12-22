@@ -2,10 +2,13 @@
   <FlexboxLayout v-if="isBusy" flexDirection="column" alignItems="center" justifyContent="center">
     <ActivityIndicator :busy="isBusy" />
   </FlexboxLayout>
-  <FlexboxLayout v-else class="container" flexDirection="column" alignItems="stretch">
+  <StackLayout v-else class="container" orientation="vertical" verticalAlignemnt="stretch">
     <!-- Header -->
-    <FlexboxLayout flexDirection="row" justifyContent="stretch">
-      <FlexboxLayout v-if="isServiceProvider" class="flex-1" flexDirection="column" alignItems="flex-start">
+    <FlexboxLayout class="header" flexDirection="row" justifyContent="stretch">
+      <FlexboxLayout v-if="hasResults" class="flex-1" flexDirection="column" alignItems="flex-start">
+        <Label class="text-button" text="Go Back" @tap="handleGoBack" />
+      </FlexboxLayout>
+      <FlexboxLayout v-else-if="isServiceProvider" class="flex-1" flexDirection="column" alignItems="flex-start">
         <Label class="text-button" text="My Listings" />
       </FlexboxLayout>
       <FlexboxLayout class="flex-1" flexDirection="column" alignItems="flex-end">
@@ -13,8 +16,18 @@
       </FlexboxLayout>
     </FlexboxLayout>
 
+    <!-- Search Results -->
+    <FlexboxLayout v-if="hasResults" class="query" flexDirection="column">
+      <Label :text="getQueryText" />
+    </FlexboxLayout>
+    <ScrollView v-if="hasResults" orientation="vertical" :scrollBarIndicatorVisible="false">
+      <StackLayout orientation="vertical" verticalAlignment="stretch">
+        <Label text="Listing 1" />
+      </StackLayout>
+    </ScrollView>
+
     <!-- Search Bar -->
-    <FlexboxLayout class="flex-1" flexDirection="row">
+    <FlexboxLayout v-else flexDirection="row" height="100%">
       <FlexboxLayout
         class="flex-1"
         flexDirection="column"
@@ -25,7 +38,7 @@
         <search-bar />
       </FlexboxLayout>
     </FlexboxLayout>
-  </FlexboxLayout>
+  </StackLayout>
 </template>
 
 <script>
@@ -38,20 +51,35 @@ export default {
   computed: {
     ...mapGetters([
       'getIsBusy',
-      'getAccount'
+      'getAccount',
+      'getSearchQuery',
+      'getResults'
     ]),
     isBusy() {
       return this.getIsBusy;
     },
     isServiceProvider() {
       return this.getAccount.accountType === 'Service Provider';
+    },
+    hasResults() {
+      return this.getResults.length > 0;
+    },
+    getQueryText() {
+      const query = this.getSearchQuery;
+      const results = this.getResults;
+
+      return `Search Results for "${query}" (${results.length})`;
     }
   },
   methods: {
     ...mapMutations([
       'setIsBusy',
+      'clearResults',
       'resetApp'
     ]),
+    handleGoBack() {
+      this.clearResults();
+    },
     handleSignOut() {
       this.setIsBusy(true);
 
@@ -67,7 +95,11 @@ export default {
 
 <style scoped>
 .container {
-  padding: 20px 80px 0 80px
+  padding: 0px 80px;
+}
+
+.header {
+  padding: 20px 0px;
 }
 
 .heading {
@@ -81,5 +113,10 @@ export default {
 
 .text-button {
   font-size: 16px;
+}
+
+.query {
+  font-size: 16px;
+  margin: 10px 0;
 }
 </style>
