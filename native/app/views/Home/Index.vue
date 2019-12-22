@@ -113,6 +113,7 @@ export default {
 
 .text-button {
   font-size: 16px;
+  font-weight: 500;
 }
 
 .query {
