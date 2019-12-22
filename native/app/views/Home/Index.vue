@@ -22,7 +22,7 @@
     </FlexboxLayout>
     <ScrollView v-if="hasResults" orientation="vertical" :scrollBarIndicatorVisible="false">
       <StackLayout orientation="vertical" verticalAlignment="stretch">
-        <Label text="Listing 1" />
+        <listing />
       </StackLayout>
     </ScrollView>
 
