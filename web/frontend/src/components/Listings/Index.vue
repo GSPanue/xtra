@@ -172,6 +172,7 @@ export default {
       'setListings'
     ]),
     showDialog() {
+      this.listingForm.tutor = this.getName;
       this.dialogVisible = true;
     },
     hideDialog() {
