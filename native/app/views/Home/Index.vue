@@ -23,9 +23,9 @@
     <ScrollView v-if="hasResults" orientation="vertical" :scrollBarIndicatorVisible="false" height="100%">
       <StackLayout orientation="vertical" verticalAlignment="stretch">
         <listing
-          v-bind:class="{ spacing: index !== (listings.length - 1) }"
+          class="spacing"
           v-bind:key="listing._id"
-          v-for="(listing, index) in listings"
+          v-for="(listing) in listings"
           :id="listing._id"
           :accountId="listing.accountId"
           :topic="listing.topic"
