@@ -25,7 +25,7 @@
         <listing
           v-bind:class="{ spacing: index !== (listings.length - 1) }"
           v-bind:key="listing._id"
-          v-for="(listing) in listings"
+          v-for="(listing, index) in listings"
           :id="listing._id"
           :accountId="listing.accountId"
           :topic="listing.topic"
