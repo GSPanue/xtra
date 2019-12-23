@@ -9,7 +9,8 @@ const store = new Vuex.Store({
     account: null,
     searchQuery: '',
     results: [],
-    listings: []
+    listings: [],
+    showListings: false
   },
   getters: {
     getIsBusy: ({ isBusy }) => (
@@ -26,11 +27,14 @@ const store = new Vuex.Store({
     ),
     getListings: ({ listings }) => (
       listings
+    ),
+    getShowListings: ({ showListings }) => (
+      showListings
     )
   },
   mutations: {
     setIsBusy: (store, newIsBusy) => {
-      store.isBusy = newIsBusy
+      store.isBusy = newIsBusy;
     },
     setAccount: (store, newAccount) => {
       store.account = newAccount;
@@ -42,11 +46,14 @@ const store = new Vuex.Store({
       store.results = newResults;
     },
     setListings: (store, newListings) => {
-      store.listings = newListings
+      store.listings = newListings;
+    },
+    setShowListings: (store, newShowListings) => {
+      store.showListings = newShowListings;
     },
     clearResults: (store) => {
       store.searchQuery = '';
-      store.results = []
+      store.results = [];
     },
     resetApp: (store) => {
       store.isBusy = false;
@@ -54,6 +61,7 @@ const store = new Vuex.Store({
       store.searchQuery = '';
       store.results = [];
       store.listings = [];
+      store.showListings = false;
     }
   }
 });
