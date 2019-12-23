@@ -8,6 +8,9 @@
       <FlexboxLayout v-if="hasResults" class="flex-1" flexDirection="column" alignItems="flex-start">
         <Label class="text-button" text="Go Back" @tap="handleGoBack" />
       </FlexboxLayout>
+      <FlexboxLayout v-else-if="shouldShowListings" class="flex-1" flexDirection="column" alignItems="flex-start">
+        <Label class="text-button" text="Home" @tap="handleHome" />
+      </FlexboxLayout>
       <FlexboxLayout v-else-if="isServiceProvider" class="flex-1" flexDirection="column" alignItems="flex-start">
         <Label class="text-button" text="My Listings" @tap="handleMyListings" />
       </FlexboxLayout>
@@ -107,6 +110,9 @@ export default {
     ]),
     handleGoBack() {
       this.clearResults();
+    },
+    handleHome() {
+      this.setShowListings(false);
     },
     handleMyListings() {
       this.setShowListings(true);
