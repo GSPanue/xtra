@@ -22,9 +22,45 @@
     <!-- Listings -->
     <StackLayout v-if="shouldShowListings" orientation="vertical">
       <FlexboxLayout flexDirection="column">
-        <Label class="add-listing-button" text="Add Listing" />
+        <Label v-if="!shouldShowAddListing" class="button" text="Add Listing" @tap="handleAddListing" />
+        <Label v-else class="button" text="Go Back" @tap="handleGoBack" />
       </FlexboxLayout>
-      <ScrollView orientation="vertical" :scrollBarIndicatorVisible="false" height="100%">
+      <FlexboxLayout v-if="shouldShowAddListing" flexDirection="column">
+        <FlexboxLayout flexDirection="row" justifyContent="space-between">
+          <input
+            class="form-left"
+            label="Topic"
+            v-model="listing.topic"
+          />
+          <input
+            class="form-right"
+            label="Price"
+            v-model="listing.price"
+          />
+        </FlexboxLayout>
+        <FlexboxLayout flexDirection="row" justifyContent="space-between">
+          <input
+            class="form-left"
+            label="Duration"
+            v-model="listing.duration"
+          />
+          <input
+            class="form-right"
+            label="Location"
+            v-model="listing.location"
+          />
+        </FlexboxLayout>
+        <FlexboxLayout flexDirection="row" justifyContent="space-between">
+          <input
+            width="100%"
+            label="Time"
+            v-model="listing.time"
+          />
+        </FlexboxLayout>
+
+        <button class="submit-button" text="Submit" @tap="handleSubmit" />
+      </FlexboxLayout>
+      <ScrollView v-else orientation="vertical" :scrollBarIndicatorVisible="false" height="100%">
         <StackLayout orientation="vertical" verticalAlignment="stretch">
           <listing
             class="spacing"
@@ -93,6 +129,18 @@ import { getAPIURL } from '@/helpers';
 const api = getAPIURL();
 
 export default {
+  data() {
+    return {
+      listing: {
+        topic: '',
+        price: '',
+        duration: '',
+        location: '',
+        time: ''
+      },
+      shouldShowAddListing: false
+    }
+  },
   computed: {
     ...mapGetters([
       'getIsBusy',
@@ -131,18 +179,63 @@ export default {
   methods: {
     ...mapMutations([
       'setIsBusy',
+      'setListings',
       'setShowListings',
       'clearResults',
       'resetApp'
     ]),
+    resetListing() {
+      this.listing = {
+        topic: '',
+        price: '',
+        duration: '',
+        location: '',
+        time: ''
+      }
+    },
     handleGoBack() {
+      if (this.shouldShowAddListing) {
+        this.resetListing();
+        this.shouldShowAddListing = false;
+        return;
+      }
+
       this.clearResults();
     },
     handleHome() {
+      this.resetListing();
+      this.shouldShowAddListing = false;
       this.setShowListings(false);
     },
     handleMyListings() {
       this.setShowListings(true);
+    },
+    handleAddListing() {
+      this.shouldShowAddListing = true;
+    },
+    handleSubmit() {
+      const { _id: accountId, firstName, lastName } = this.getAccount;
+      const tutor = `${firstName} ${lastName}`;
+
+      this.setIsBusy(true);
+
+      this.axios.post(`${api}/listing/create`, {
+        accountId,
+        ...this.listing,
+        tutor
+      }).then(() => {
+        return this.axios.get(`${api}/listing/find`, {
+          params: {
+            accountId
+          }
+        });
+      }).then(({ data: listings }) => {
+        this.setListings(listings);
+      }).finally(() => {
+        this.setIsBusy(false);
+        this.resetListing();
+        this.shouldShowAddListing = false;
+      });
     },
     handleSignOut() {
       this.setIsBusy(true);
@@ -175,6 +268,12 @@ export default {
   flex: 1;
 }
 
+.button {
+  font-size: 16px;
+  font-weight: 500;
+  margin: 10px 0;
+}
+
 .text-button {
   font-size: 16px;
   font-weight: 500;
@@ -185,13 +284,23 @@ export default {
   margin: 10px 0;
 }
 
-.add-listing-button {
-  font-size: 16px;
-  font-weight: 500;
-  margin: 10px 0;
-}
-
 .spacing {
   margin-bottom: 40px;
+}
+
+.form-left {
+  width: 100%;
+  margin-right: 2.5%;
+}
+
+.form-right {
+  width: 100%;
+  margin-left: 2.5%;
+}
+
+.submit-button {
+  width: 100%;
+  margin-top: 40px;
+  font-size: 22px;
 }
 </style>
