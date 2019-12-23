@@ -20,9 +20,29 @@
     </FlexboxLayout>
 
     <!-- Listings -->
-    <FlexboxLayout v-if="shouldShowListings">
-      <Label text="Listings" />
-    </FlexboxLayout>
+    <StackLayout v-if="shouldShowListings" orientation="vertical">
+      <FlexboxLayout flexDirection="column">
+        <Label class="add-listing-button" text="Add Listing" />
+      </FlexboxLayout>
+      <ScrollView orientation="vertical" :scrollBarIndicatorVisible="false" height="100%">
+        <StackLayout orientation="vertical" verticalAlignment="stretch">
+          <listing
+            class="spacing"
+            v-bind:key="listing._id"
+            v-for="(listing) in listings"
+            :id="listing._id"
+            :accountId="listing.accountId"
+            :topic="listing.topic"
+            :tutor="listing.tutor"
+            :location="listing.location"
+            :price="listing.price"
+            :duration="listing.duration"
+            :time="listing.time"
+            :ratings="listing.ratings"
+          />
+        </StackLayout>
+      </ScrollView>
+    </StackLayout>
 
     <!-- Search Results -->
     <StackLayout v-else-if="hasResults" orientation="vertical">
@@ -77,6 +97,7 @@ export default {
       'getAccount',
       'getSearchQuery',
       'getResults',
+      'getListings',
       'getShowListings'
     ]),
     isBusy() {
@@ -98,6 +119,10 @@ export default {
       return `Search Results for "${query}" (${results.length})`;
     },
     listings() {
+      if (this.shouldShowListings) {
+        return this.getListings;
+      }
+
       return this.getResults;
     }
   },
@@ -155,6 +180,12 @@ export default {
 
 .query {
   font-size: 16px;
+  margin: 10px 0;
+}
+
+.add-listing-button {
+  font-size: 16px;
+  font-weight: 500;
   margin: 10px 0;
 }
 
