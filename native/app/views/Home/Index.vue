@@ -22,7 +22,20 @@
     </FlexboxLayout>
     <ScrollView v-if="hasResults" orientation="vertical" :scrollBarIndicatorVisible="false" height="100%">
       <StackLayout orientation="vertical" verticalAlignment="stretch">
-        <listing />
+        <listing
+          v-bind:class="{ spacing: index !== (listings.length - 1) }"
+          v-bind:key="listing._id"
+          v-for="(listing) in listings"
+          :id="listing._id"
+          :accountId="listing.accountId"
+          :topic="listing.topic"
+          :tutor="listing.tutor"
+          :location="listing.location"
+          :price="listing.price"
+          :duration="listing.duration"
+          :time="listing.time"
+          :ratings="listing.ratings"
+        />
       </StackLayout>
     </ScrollView>
 
@@ -69,6 +82,9 @@ export default {
       const results = this.getResults;
 
       return `Search Results for "${query}" (${results.length})`;
+    },
+    listings() {
+      return this.getResults;
     }
   },
   methods: {
@@ -119,5 +135,9 @@ export default {
 .query {
   font-size: 16px;
   margin: 10px 0;
+}
+
+.spacing {
+  margin-bottom: 40px;
 }
 </style>
