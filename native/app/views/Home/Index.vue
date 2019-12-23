@@ -9,35 +9,42 @@
         <Label class="text-button" text="Go Back" @tap="handleGoBack" />
       </FlexboxLayout>
       <FlexboxLayout v-else-if="isServiceProvider" class="flex-1" flexDirection="column" alignItems="flex-start">
-        <Label class="text-button" text="My Listings" />
+        <Label class="text-button" text="My Listings" @tap="handleMyListings" />
       </FlexboxLayout>
       <FlexboxLayout class="flex-1" flexDirection="column" alignItems="flex-end">
         <Label class="text-button" text="Sign Out" @tap="handleSignOut" />
       </FlexboxLayout>
     </FlexboxLayout>
 
-    <!-- Search Results -->
-    <FlexboxLayout v-if="hasResults" class="query" flexDirection="column">
-      <Label :text="getQueryText" />
+    <!-- Listings -->
+    <FlexboxLayout v-if="shouldShowListings">
+      <Label text="Listings" />
     </FlexboxLayout>
-    <ScrollView v-if="hasResults" orientation="vertical" :scrollBarIndicatorVisible="false" height="100%">
-      <StackLayout orientation="vertical" verticalAlignment="stretch">
-        <listing
-          class="spacing"
-          v-bind:key="listing._id"
-          v-for="(listing) in listings"
-          :id="listing._id"
-          :accountId="listing.accountId"
-          :topic="listing.topic"
-          :tutor="listing.tutor"
-          :location="listing.location"
-          :price="listing.price"
-          :duration="listing.duration"
-          :time="listing.time"
-          :ratings="listing.ratings"
-        />
-      </StackLayout>
-    </ScrollView>
+
+    <!-- Search Results -->
+    <StackLayout v-else-if="hasResults" orientation="vertical">
+      <FlexboxLayout class="query" flexDirection="column">
+        <Label :text="getQueryText" />
+      </FlexboxLayout>
+      <ScrollView orientation="vertical" :scrollBarIndicatorVisible="false" height="100%">
+        <StackLayout orientation="vertical" verticalAlignment="stretch">
+          <listing
+            class="spacing"
+            v-bind:key="listing._id"
+            v-for="(listing) in listings"
+            :id="listing._id"
+            :accountId="listing.accountId"
+            :topic="listing.topic"
+            :tutor="listing.tutor"
+            :location="listing.location"
+            :price="listing.price"
+            :duration="listing.duration"
+            :time="listing.time"
+            :ratings="listing.ratings"
+          />
+        </StackLayout>
+      </ScrollView>
+    </StackLayout>
 
     <!-- Search Bar -->
     <FlexboxLayout v-else flexDirection="row" height="100%">
@@ -66,7 +73,8 @@ export default {
       'getIsBusy',
       'getAccount',
       'getSearchQuery',
-      'getResults'
+      'getResults',
+      'getShowListings'
     ]),
     isBusy() {
       return this.getIsBusy;
@@ -76,6 +84,9 @@ export default {
     },
     hasResults() {
       return this.getResults.length > 0;
+    },
+    shouldShowListings() {
+      return this.getShowListings;
     },
     getQueryText() {
       const query = this.getSearchQuery;
@@ -90,11 +101,15 @@ export default {
   methods: {
     ...mapMutations([
       'setIsBusy',
+      'setShowListings',
       'clearResults',
       'resetApp'
     ]),
     handleGoBack() {
       this.clearResults();
+    },
+    handleMyListings() {
+      this.setShowListings(true);
     },
     handleSignOut() {
       this.setIsBusy(true);
