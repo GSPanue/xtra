@@ -1,5 +1,6 @@
 <template>
   <FlexboxLayout flexDirection="column">
+    <!-- Remove Listing Button -->
     <FlexboxLayout v-if="editable" flexDirection="row">
       <FlexboxLayout class="flex-1" flexDirection="column" alignItems="flex-end">
         <Label class="text-button" text="Remove" @tap="handleRemove" />
