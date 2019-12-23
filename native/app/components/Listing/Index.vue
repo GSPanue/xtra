@@ -1,5 +1,10 @@
 <template>
   <FlexboxLayout flexDirection="column">
+    <FlexboxLayout v-if="editable" flexDirection="row">
+      <FlexboxLayout class="flex-1" flexDirection="column" alignItems="flex-end">
+        <Label class="text-button" text="Remove" @tap="handleRemove" />
+      </FlexboxLayout>
+    </FlexboxLayout>
     <FlexboxLayout class="listing-top" flexDirection="column">
       <!-- Topic & Price -->
       <FlexboxLayout flexDirection="row">
@@ -66,7 +71,8 @@ export default {
     'duration',
     'location',
     'time',
-    'ratings'
+    'ratings',
+    'editable'
   ],
   computed: {
     ...mapGetters([
@@ -108,7 +114,8 @@ export default {
       'getResults'
     ]),
     ...mapMutations([
-      'setResults'
+      'setResults',
+      'setListings'
     ]),
     handleRating() {
       const ratings = ['1 Star', '2 Stars', '3 Stars', '4 Stars', '5 Stars'];
@@ -145,6 +152,22 @@ export default {
             this.setResults(newListings);
           });
         }
+      });
+    },
+    handleRemove() {
+      const account = this.getAccount;
+      const listingId = this.id;
+
+      this.axios.post(`${api}/listing/remove`, {
+        _id: listingId
+      }).then(() => {
+        return this.axios.get(`${api}/listing/find`, {
+          params:{
+            accountId: account._id
+          }
+        });
+      }).then(({ data: listings }) => {
+        this.setListings(listings);
       });
     }
   }
@@ -184,5 +207,10 @@ export default {
   padding: 0;
   margin: 0;
   height: 80px;
+}
+
+.text-button {
+  font-size: 14px;
+  font-weight: 500;
 }
 </style>
