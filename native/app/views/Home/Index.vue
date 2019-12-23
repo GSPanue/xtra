@@ -39,6 +39,7 @@
             :duration="listing.duration"
             :time="listing.time"
             :ratings="listing.ratings"
+            :editable="true"
           />
         </StackLayout>
       </ScrollView>
@@ -64,6 +65,7 @@
             :duration="listing.duration"
             :time="listing.time"
             :ratings="listing.ratings"
+            :editable="false"
           />
         </StackLayout>
       </ScrollView>
