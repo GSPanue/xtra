@@ -19,7 +19,7 @@ A web application for looking for after school classes and activities
     );
     ```
 3. Start your MongoDB server
-4. Start the local server: ``npm start:web``
+4. Start the local server: ``npm run start:web``
 5. Go to ``http://localhost:3000``
 
 ## Demo (Native)
@@ -27,7 +27,7 @@ To demo the Native application, you will need to follow the [NativeScript-Vue In
 
 1. Generate the frontend and backend bundles: ``npm run build:web``
 2. Start your MongoDB server
-3. Start the local server: ``npm start:web``
+3. Start the local server: ``npm run start:web``
 4. Change the API address in ``native/app/helpers/api/api.js`` to your own:
 
     ```
