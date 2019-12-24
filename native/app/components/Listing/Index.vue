@@ -10,11 +10,19 @@
       <!-- Topic & Price -->
       <FlexboxLayout flexDirection="row">
         <FlexboxLayout class="flex-1" flexDirection="column" alignItems="flex-start">
-          <Label class="listing-heading" text="Topic" />
+          <Label
+            class="listing-heading"
+            :text="getListingHeadingText('Topic')"
+            v-on="{ tap: editable ? handleEdit.bind(this, 'Topic') : null }"
+          />
           <Label class="listing-value" :text="topic" />
         </FlexboxLayout>
         <FlexboxLayout class="flex-1" flexDirection="column" alignItems="flex-end">
-          <Label class="listing-heading" text="Price" />
+          <Label
+            class="listing-heading"
+            :text="getListingHeadingText('Price')"
+            v-on="{ tap: editable ? handleEdit.bind(this, 'Price') : null }"
+          />
           <Label class="listing-value" :text="`£${price}`" />
         </FlexboxLayout>
       </FlexboxLayout>
@@ -22,11 +30,18 @@
       <!-- Tutor & Duration -->
       <FlexboxLayout flexDirection="row">
         <FlexboxLayout class="flex-1" flexDirection="column" alignItems="flex-start">
-          <Label class="listing-heading" text="Tutor" />
+          <Label
+            class="listing-heading"
+            text="Tutor"
+          />
           <Label class="listing-value" :text="tutor" />
         </FlexboxLayout>
         <FlexboxLayout class="flex-1" flexDirection="column" alignItems="flex-end">
-          <Label class="listing-heading" text="Duration" />
+          <Label
+            class="listing-heading"
+            :text="getListingHeadingText('Duration')"
+            v-on="{ tap: editable ? handleEdit.bind(this, 'Duration') : null }"
+          />
           <Label class="listing-value" :text="duration" />
         </FlexboxLayout>
       </FlexboxLayout>
@@ -34,11 +49,19 @@
       <!-- Location & Time -->
       <FlexboxLayout flexDirection="row">
         <FlexboxLayout class="flex-1" flexDirection="column" alignItems="flex-start">
-          <Label class="listing-heading" text="Location" />
+          <Label
+            class="listing-heading"
+            :text="getListingHeadingText('Location')"
+            v-on="{ tap: editable ? handleEdit.bind(this, 'Location') : null }"
+          />
           <Label class="listing-value" :text="location" />
         </FlexboxLayout>
         <FlexboxLayout class="flex-1" flexDirection="column" alignItems="flex-end">
-          <Label class="listing-heading" text="Time" />
+          <Label
+            class="listing-heading"
+            :text="getListingHeadingText('Time')"
+            v-on="{ tap: editable ? handleEdit.bind(this, 'Time') : null }"
+          />
           <Label class="listing-value" :text="time" />
         </FlexboxLayout>
       </FlexboxLayout>
@@ -115,9 +138,13 @@ export default {
       'getResults'
     ]),
     ...mapMutations([
+      'setIsBusy',
       'setResults',
       'setListings'
     ]),
+    getListingHeadingText(heading) {
+      return (this.editable) ? `${heading} (Edit)` : heading;
+    },
     handleRating() {
       const ratings = ['1 Star', '2 Stars', '3 Stars', '4 Stars', '5 Stars'];
 
@@ -155,9 +182,57 @@ export default {
         }
       });
     },
+    handleEdit(field) {
+      const defaultText = this[field.toLowerCase()].toString();
+
+      prompt({
+        title: `Edit ${field}`,
+        inputType: 'text',
+        okButtonText: 'OK',
+        cancelButtonText: 'CANCEL',
+        defaultText
+      }).then(({ result, text }) => {
+        const listingId = this.id;
+
+        if (result) {
+          this.setIsBusy(true);
+
+          this.axios.get(`${api}/listing/find`, {
+            params: {
+              _id: listingId
+            }
+          }).then(({ data: listing }) => {
+            const key = field.toLowerCase();
+
+            listing[0] = {
+              ...listing[0],
+              [key]: text
+            }
+
+            return this.axios.put(`${api}/listing/update`, {
+              ...listing[0]
+            });
+          }).then(() => {
+            const { _id: accountId } = this.getAccount;
+
+            return this.axios.get(`${api}/listing/find`, {
+              params: {
+                accountId
+              }
+            });
+          }).then(({ data: listings }) => {
+            this.setListings(listings);
+          }).finally(() => {
+            this.setIsBusy(false);
+          });
+        }
+      });
+    },
     handleRemove() {
       const account = this.getAccount;
       const listingId = this.id;
+
+      this.setIsBusy(true);
 
       this.axios.post(`${api}/listing/remove`, {
         _id: listingId
@@ -169,6 +244,8 @@ export default {
         });
       }).then(({ data: listings }) => {
         this.setListings(listings);
+      }).finally(() => {
+        this.setIsBusy(false);
       });
     }
   }
