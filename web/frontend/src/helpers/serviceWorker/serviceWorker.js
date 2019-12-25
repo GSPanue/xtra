@@ -1,3 +1,5 @@
+import { Workbox } from 'workbox-window';
+
 const shouldRegisterServiceWorker = () => {
   const isProductionMode = process.env.NODE_ENV === 'production';
   const hasServiceWorker = 'serviceWorker' in navigator;
@@ -9,9 +11,23 @@ const registerServiceWorker = () => {
   const shouldRegister = shouldRegisterServiceWorker();
 
   if (shouldRegister) {
-    const { serviceWorker } = navigator;
+    Notification.requestPermission((status) => {
+      const { serviceWorker } = navigator;
 
-    serviceWorker.register('/service-worker.js');
+      if (status === 'granted') {
+        const wb = new Workbox('/service-worker.js');
+
+        wb.addEventListener('installed', () => {
+          new Notification('Xtra', {
+            body: 'Created Cache'
+          });
+        });
+
+        wb.register();
+      }
+
+      serviceWorker.register('/service-worker.js');
+    });
   }
 };
 
