@@ -11,7 +11,7 @@ A web application for looking for after school classes and activities
 
 ## Demo (Web)
 1. Generate the frontend and backend bundles: ``npm run build:web``
-2. Add the following code to ``service-worker.js`` located in ``frontend/dist``:
+2. Add the following code to ``service-worker.js`` located in ``web/frontend/dist``:
 
     ```
     addEventListener('message', (event) => {
