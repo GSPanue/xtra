@@ -1,0 +1,9 @@
+{
+  "android": {
+    "v8Flags": "--expose_gc",
+    "markingMode": "none"
+  },
+  "main": "index",
+  "name": "xtra",
+  "version": "1.0.0"
+}
