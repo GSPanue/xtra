@@ -14,6 +14,19 @@ A web application for looking for after school classes and activities
 2. Add the following code to ``service-worker.js`` located in ``frontend/dist``:
 
     ```
+    addEventListener('message', (event) => {
+      const { type, meta } = event.data;
+
+      if (type === 'WINDOW_READY' && meta === 'workbox-window') {
+        const title = 'Xtra';
+        const options = {
+          body: 'Served Cache'
+        };
+
+        event.waitUntil(self.registration.showNotification(title, options));
+      }
+    });
+
     workbox.routing.registerNavigationRoute(
       workbox.precaching.getCacheKeyForURL('/index.html')
     );
