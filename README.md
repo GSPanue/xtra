@@ -28,7 +28,7 @@ To demo the Native application, you will need to follow the [NativeScript-Vue In
 1. Generate the frontend and backend bundles: ``npm run build:web``
 2. Start your MongoDB server
 3. Start the local server: ``npm run start:web``
-4. Change the API address in ``native/app/helpers/api/api.js`` to your own:
+4. Change the IP address in ``native/app/helpers/api/api.js`` to your own:
 
     ```
     const getAPIURL = () => (
