@@ -8,71 +8,75 @@
     flexDirection="column"
     justifyContent="center"
   >
-    <Label v-if="shouldShowSignInForm" class="heading" text="Sign In" />
-    <Label v-else class="heading" text="Register" />
+    <TabView androidTabsPosition="bottom"
+      :selectedIndex="selectedIndex"
+      @selectedIndexChange="handleTab"
+    >
+      <!-- Sign In Tab -->
+      <TabViewItem title="Sign In">
+        <StackLayout>
+          <Label class="heading" text="Sign In" />
+          <!-- Sign In Form -->
+          <FlexboxLayout flexDirection="column">
+            <input
+              label="Email Address"
+              keyboardType="email"
+              v-model="account.emailAddress"
+            />
+            <input
+              label="Password"
+              :secure="true"
+              v-model="account.password"
+            />
+          </FlexboxLayout>
 
-    <!-- Sign In Form -->
-    <FlexboxLayout v-if="shouldShowSignInForm" flexDirection="column">
-      <input
-        label="Email Address"
-        keyboardType="email"
-        v-model="account.emailAddress"
-      />
-      <input
-        label="Password"
-        :secure="true"
-        v-model="account.password"
-      />
-    </FlexboxLayout>
+          <Button class="submit" text="Submit" @tap="handleSubmit" />
+        </StackLayout>
+      </TabViewItem>
 
-    <!-- Register Form -->
-    <FlexboxLayout v-else flexDirection="column">
-      <FlexboxLayout flexDirection="row" justifyContent="space-between">
-        <input
-          class="form-left"
-          label="First Name"
-          v-model="account.firstName"
-        />
-        <input
-          class="form-right"
-          label="Last Name"
-          v-model="account.lastName"
-        />
-      </FlexboxLayout>
-      <FlexboxLayout flexDirection="row" justifyContent="space-between">
-        <input
-          class="form-left"
-          label="Email Address"
-          keyboardType="email"
-          v-model="account.emailAddress"
-        />
-        <input
-          class="form-right"
-          label="Password"
-          :secure="true"
-          v-model="account.password"
-        />
-      </FlexboxLayout>
-      <SegmentedBar class="segmented-bar" v-model="account.accountType">
-        <SegmentedBarItem title="Standard" />
-        <SegmentedBarItem title="Service Provider" />
-      </SegmentedBar>
-    </FlexboxLayout>
+      <!-- Register Tab -->
+      <TabViewItem title="Register">
+        <StackLayout>
+          <Label class="heading" text="Register" />
 
-    <Button class="submit" text="Submit" @tap="handleSubmit" />
+          <!-- Register Form -->
+          <FlexboxLayout flexDirection="column">
+            <FlexboxLayout flexDirection="row" justifyContent="space-between">
+              <input
+                class="form-left"
+                label="First Name"
+                v-model="account.firstName"
+              />
+              <input
+                class="form-right"
+                label="Last Name"
+                v-model="account.lastName"
+              />
+            </FlexboxLayout>
+            <FlexboxLayout flexDirection="row" justifyContent="space-between">
+              <input
+                class="form-left"
+                label="Email Address"
+                keyboardType="email"
+                v-model="account.emailAddress"
+              />
+              <input
+                class="form-right"
+                label="Password"
+                :secure="true"
+                v-model="account.password"
+              />
+            </FlexboxLayout>
+            <SegmentedBar class="segmented-bar" v-model="account.accountType">
+              <SegmentedBarItem title="Standard" />
+              <SegmentedBarItem title="Service Provider" />
+            </SegmentedBar>
+          </FlexboxLayout>
 
-    <Label
-      v-if="shouldShowSignInForm"
-      class="text-button"
-      text="Don't have an account? Click to register!"
-      @tap="showRegister"
-    />
-    <Label
-      v-else
-      class="text-button"
-      text="Already have an account? Click to sign in!"
-      @tap="showSignIn"
-    />
+          <Button class="submit" text="Submit" @tap="handleSubmit" />
+        </StackLayout>
+      </TabViewItem>
+    </TabView>
   </FlexboxLayout>
 </template>
 
@@ -93,7 +97,7 @@ export default {
         lastName: '',
         accountType: 0
       },
-      shouldShowSignInForm: true
+      selectedIndex: 0
     }
   },
   computed: {
@@ -110,14 +114,6 @@ export default {
       'setAccount',
       'setListings'
     ]),
-    showRegister() {
-      this.resetForm();
-      this.shouldShowSignInForm = false;
-    },
-    showSignIn() {
-      this.resetForm();
-      this.shouldShowSignInForm = true;
-    },
     resetForm() {
       this.account = {
         emailAddress: '',
@@ -127,9 +123,13 @@ export default {
         accountType: 0
       }
     },
+    handleTab({ value }) {
+      this.resetForm();
+      this.selectedIndex = value;
+    },
     handleSubmit() {
       const account = this.account;
-      const isSigningIn = this.shouldShowSignInForm;
+      const isSigningIn = this.selectedIndex === 0;
 
       if (isSigningIn) {
         const hasEnteredEmailAndPassword = account.emailAddress.length > 0 && account.password.length > 0;
@@ -198,7 +198,10 @@ export default {
             ...account,
             accountType: (account.accountType === 0) ? 'Standard' : 'Service Provider'
           }).then(() => {
-            this.showSignIn();
+            this.handleTab({
+              value: 0
+            });
+
             this.setIsBusy(false);
           });
         }).catch(() => {
@@ -218,8 +221,8 @@ export default {
 }
 
 .heading {
-  font-size: 34px;
-  padding-bottom: 60px;
+  font-size: 32px;
+  padding: 60px 0;
 }
 
 .submit {
