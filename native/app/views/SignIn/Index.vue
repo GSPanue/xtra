@@ -132,7 +132,7 @@ export default {
       const isSigningIn = this.shouldShowSignInForm;
 
       if (isSigningIn) {
-        const hasEnteredEmailAndPassword = account.emailAddress && account.password;
+        const hasEnteredEmailAndPassword = account.emailAddress.length > 0 && account.password.length > 0;
         const hasEnteredValidEmail = isEmail(account.emailAddress);
 
         if (hasEnteredEmailAndPassword && hasEnteredValidEmail) {
@@ -174,11 +174,11 @@ export default {
         sendAlert('Please provide an email address and password.');
       }
       else {
-        const hasEnteredName = account.firstName && account.lastName;
-        const hasEnteredEmailAndPassword = account.emailAddress && account.password;
+        const hasEnteredName = account.firstName.length > 0 && account.lastName.length > 0;
+        const hasEnteredEmailAndPassword = account.emailAddress.length > 0 && account.password.length > 0;
         const hasEnteredValidEmail = isEmail(account.emailAddress);
 
-        if (!hasEnteredName && !hasEnteredEmailAndPassword) {
+        if (!hasEnteredName || !hasEnteredEmailAndPassword) {
           sendAlert('Please complete all of the form fields.');
           return;
         }
