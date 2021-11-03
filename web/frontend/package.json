@@ -32,7 +32,7 @@
     "file-loader": "^4.2.0",
     "lodash.orderby": "^4.6.0",
     "style-loader": "^1.0.0",
-    "validator": "^11.1.0",
+    "validator": "^13.7.0",
     "vue-loader": "^15.7.1",
     "vue-template-compiler": "^2.6.10",
     "webpack": "^4.41.0",
